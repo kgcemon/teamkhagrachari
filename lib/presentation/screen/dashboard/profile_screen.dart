@@ -1,110 +1,278 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:teamkhagrachari/bangla_convertor.dart';
+import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/utils/color.dart';
+import '../../controller/user_auth_controller.dart';
+import '../../widget/url_luncher.dart';
+import '../auth/login_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Get.find<ProfileScreenController>().getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.red,
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: const Column(
+      body: GetBuilder<ProfileScreenController>(
+        builder: (controller) {
+          if (controller.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (controller.profileData.data == null) {
+            return const Center(child: Text('Failed to load profile'));
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Emon Khan',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    height: 230,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.13),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5), 
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(90)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(90),
+                                  child: Image.network(
+                                    "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
+                                    height: 60,
+                                  ),
+                                )),
+
+                            const AppbarPopUpMenuWidget()
+                          ],
+                        ),
+                        Text(
+                          controller.profileData.data?.name ?? "",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on,size: 11,color: Colors.white,),
+                            Text(
+                              controller.profileData.data?.upazila ?? "",
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.7),
+                                  fontSize: 11),
+                            ),
+                          ],
+                        ),
+
+                        Row(
+                          children: [
+                            const Icon(Icons.call,color: Colors.white,size: 11,),
+                            const SizedBox(width: 3,),
+                            Text( controller.profileData.data?.phone ?? "",style: const TextStyle(fontSize: 11,color: Colors.white),),
+                          ],
+                        ),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.orange),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "সেবা যুক্ত করুন",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "পণ্য বিক্রি করুন",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    '95%',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProfileStat(icon: Icons.favorite, label: '5 lives Saved'),
-                      SizedBox(width: 20),
-                      ProfileStat(icon: Icons.star, label: 'SuperHero'),
-                      SizedBox(width: 20),
-                      ProfileStat(icon: Icons.thumb_up, label: '12 appreciations'),
-                    ],
+                  const ProfileItem(
+                      label: 'আপনার সেবা সমুহ',
+                      value: "আপনার সকল সেবা সেখতে ক্লিক করুন",
+                      iconData: Icons.local_activity),
+                  ProfileItem(
+                    label: 'সর্বশেষ রক্তদানের তারিখ:',
+                    value: BanglaConvertor.convertPrice(
+                      DateFormat('dd/MM/yyyy').format(
+                        DateTime.parse(
+                          controller.profileData.data!.lastDonateDate
+                              .toString(),
+                        ),
+                      ),
+                    ),
+                    iconData: Icons.date_range,
+                  ),
+                  ProfileItem(
+                    label: 'পরবর্তী রক্তদানের তারিখ:',
+                    value: "${ BanglaConvertor.convertPrice(
+                      DateFormat('dd/MM/yyyy').format(
+                        DateTime.parse(controller
+                            .profileData.data!.lastDonateDate
+                            .toString())
+                            .toLocal()
+                            .add(
+                          const Duration(days: 120),
+                        ),
+                      ),
+                    )} (${BanglaConvertor.convertPrice(DateTime.parse(controller
+                        .profileData.data!.lastDonateDate
+                        .toString()).difference(DateTime.parse(controller
+                        .profileData.data!.lastDonateDate
+                        .toString())
+                        .toLocal()
+                        .add(
+                      const Duration(days: 120),
+                    )).inDays.toString().split("-")[1])} দিন বাকি)",
+                    iconData: Icons.date_range,
                   ),
                 ],
               ),
-            ),
-            SwitchListTile(
-              tileColor: Colors.white,
-              title: const Text('Available to Donate',style: TextStyle(color: Colors.black),),
-              value: true,
-              onChanged: (bool value) {},
-              activeColor: Colors.green,
-            ),
-            const ProfileMenuOption(title: 'Manage Addresses'),
-            const ProfileMenuOption(title: 'Reward Points'),
-            const ProfileMenuOption(title: 'Donor Card'),
-            const ProfileMenuOption(title: 'Badges'),
-            const ProfileMenuOption(title: 'Locations'),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
 }
 
-class ProfileStat extends StatelessWidget {
-  final IconData icon;
+class ProfileItem extends StatelessWidget {
   final String label;
+  final String value;
+  final IconData iconData;
 
-  const ProfileStat({super.key, required this.icon, required this.label});
+  const ProfileItem(
+      {super.key,
+      required this.label,
+      required this.value,
+      required this.iconData});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.white),
-        const SizedBox(height: 5),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: ListTile(
+        tileColor: Colors.white.withOpacity(0.15),
+        leading: Icon(
+          iconData,
+          color: Colors.white,
         ),
-      ],
+        title: Text(label),
+        subtitle: Text(value,style: const TextStyle(fontSize: 11),),
+      ),
     );
   }
 }
 
-class ProfileMenuOption extends StatelessWidget {
-  final String title;
 
-  const ProfileMenuOption({super.key, required this.title});
+class AppbarPopUpMenuWidget extends StatelessWidget {
+  const AppbarPopUpMenuWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: Colors.white,
-      title: Text(title,style: const TextStyle(color: Colors.black),),
-      trailing: const Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-      onTap: () {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+            value: "Privacy Policy",
+            child: Row(
+              children: [
+                Icon(Icons.privacy_tip, color: MyColors.primaryColor,),
+                const Text(" Privacy Policy"),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: "Contact",
+            child: Row(
+              children: [
+                Icon(Icons.help, color: MyColors.primaryColor),
+                const Text(" Contact Us"),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: "Remove Account",
+            child: Row(
+              children: [
+                Icon(Icons.remove_circle, color: MyColors.primaryColor),
+                const Text(" Remove Account"),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: "Log Out",
+            child: Row(
+              children: [
+                Icon(Icons.logout, color: MyColors.primaryColor,),
+                const Text(" Log Out"),
+              ],
+            ),
+          ),
+        ];
+      },
+      onSelected: (value) {
+        if (value.contains("Privacy Policy")) {
+          launchUrls("https://www.bizeglobal.com/privacy-policy");
+        } else if (value.contains("Log Out")) {
+          UserAuthController.clearUserData();
+          Get.offAll(() => const LoginScreen());
+        } else if (value.contains("Remove Account")) {} else
+        if (value.contains("contact")) {
+          launchUrls("https://www.bizeglobal.com/contact-us");
+        }
+        print("Selected: $value");
       },
     );
-  }}
+  }
+}

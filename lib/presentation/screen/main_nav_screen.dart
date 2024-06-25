@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
+import 'package:teamkhagrachari/presentation/screen/auth/register_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/home_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dart';
@@ -14,7 +12,8 @@ import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
 import '../controller/home_screen_controller.dart';
 
 class MainNavScreen extends StatefulWidget {
-  const MainNavScreen({super.key});
+ final String title;
+  const MainNavScreen({super.key,required this.title});
 
   @override
   State<MainNavScreen> createState() => _MainNavScreenState();
@@ -24,19 +23,19 @@ class _MainNavScreenState extends State<MainNavScreen> {
   final List<Widget> _screens = <Widget>[
     const HomeScreen(),
     const BloodScreen(),
-     ProfileScreen()
+     const ProfileScreen()
   ];
 
   @override
   void initState() {
     super.initState();
-    Get.find<HomeScreenController>().loadAll();
+    Get.find<HomeScreenController>().loadNews();
     Get.find<BloodScreenController>().fetchBloodDetails();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppbar(),
+      appBar: myAppbar(name: widget.title),
       drawer: const CustomDrawer(),
       bottomNavigationBar: GetBuilder<NavButtonControllerController>(
         builder: (navBtnController) => BottomNavigationBar(

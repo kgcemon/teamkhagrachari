@@ -2,12 +2,10 @@ import 'package:get/get.dart';
 
 class NavButtonControllerController extends GetxController {
 
-  int _selectedIndex = 0;
-
-  int get selectedIndex => _selectedIndex;
+  int selectedIndex = 0;
 
   void changeIndex(int index) {
-    _selectedIndex = index;
+    selectedIndex = index;
     update();
   }
 

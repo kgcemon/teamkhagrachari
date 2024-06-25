@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:teamkhagrachari/data/model/CategoryModel.dart';
-import 'package:teamkhagrachari/data/urls..dart';
-import '../../screen/dashboard/seba_details.dart';
+import '../../screen/seba_details.dart';
 import '../../utils/color.dart';
 
 class SebaCatagoryCard extends StatelessWidget {
@@ -50,57 +52,69 @@ class SebaCatagoryCard extends StatelessWidget {
     );
   }
 
-  GridView _buildGridView(BuildContext context) {
-    return GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: sebaList.length,
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              crossAxisCount: _getCrossAxisCount(context),
-              mainAxisExtent: 75),
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SebaDetails(
-                  sebaID: sebaList[index].id,
+  Widget _buildGridView(BuildContext context) {
+    return AnimationLimiter(
+      child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: sebaList.length,
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+                crossAxisCount: _getCrossAxisCount(context),
+                mainAxisExtent: 75),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SebaDetails(
+                    sebaname: sebaList[index].name,
+                    sebaID: sebaList[index].id,
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(5)),
-              child: FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                    children: [
-                      Image.network(
-                        sebaList[index].img.toString(),
-                        width: 30,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.error, size: 30);
-                        },
+              child: AnimationConfiguration.staggeredGrid(
+                position: index,
+                columnCount: 3,
+                duration: const Duration(milliseconds: 1500),
+                child: FlipAnimation(
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          children: [
+                            CachedNetworkImage(
+                              width: 50,
+                              imageUrl: sebaList[index].img.toString(),
+                              placeholder: (context, url) =>
+                              const CupertinoActivityIndicator(),
+                              errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(
+                              height: 7,
+                            ),
+                            Text(
+                              sebaList[index].name,
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      Text(
-                        sebaList[index].name,
-                        style: const TextStyle(
-                            fontSize: 13, color: Colors.white),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        );
+    );
   }
 
   int _getCrossAxisCount(BuildContext context) {

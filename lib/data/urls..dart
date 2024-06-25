@@ -1,9 +1,12 @@
 class ApiUrl {
-  static String mainUrl = "https://khagrachari.org/myapp";
-  static String createAccountUrl = "$mainUrl/createaccount.php";
-  static String loginAccountUrl = "$mainUrl/applogin.php";
-  static String categoryUrl = "https://kgc-app.vercel.app/api/v1/services-catagory";
-  static String categoryDetailsUrl = "https://kgc-app.vercel.app/api/v1/services?servicesCatagory=";
+  static String mainUrl = "https://kgc-app.vercel.app/api/v1";
+  static String categoryUrl = "$mainUrl/services-catagory";
+  static String categoryDetailsUrl = "$mainUrl/services?servicesCatagory=";
   static String newsApiUrl = "https://khagrachari.org/loadnews.php";
-  static String bloodUrl = "https://kgc-app.vercel.app/api/v1/users/all-donnor?isDonor=true";
+  static String bloodUrl = "$mainUrl/users/all-donnor?isDonor=true";
+  static String notice = "$mainUrl/notice";
+  static String loginUrls = "$mainUrl/auth/login";
+  static String profileUrl = "$mainUrl/users/profile";
+  static String registerUrls = "$mainUrl/auth/register";
+  static String sliderImgUrls = "$mainUrl/banner";
 }

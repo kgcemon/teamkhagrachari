@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:teamkhagrachari/presentation/screen/about_us_screen.dart';
+import 'package:teamkhagrachari/presentation/utils/color.dart';
 
 
 class CustomDrawer extends StatelessWidget {
@@ -10,6 +12,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: MyColors.primaryColor,
         child: ListView(
           children: [
             Align(
@@ -20,30 +23,36 @@ class CustomDrawer extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 18.0),
                       child: Icon(Icons.close),
                     ))),
-            const ListTile(
-              title: Text("About Us",),
-              leading: Icon(Icons.info_outline),
+              ListTile(
+                tileColor: MyColors.primaryColor,
+               onTap: () => Get.to(()=> const AboutUsPage()),
+              title: const Text("About Us",),
+              leading: const Icon(Icons.info_outline,color: Colors.white),
             ),
-            const ListTile(
+             ListTile(
+              tileColor: MyColors.primaryColor,
               selectedColor: Colors.red,
-              title: Text("Contact Us",),
-              leading: Icon(Icons.sms),
+              title: const Text("Contact Us",),
+              leading: const Icon(Icons.sms,color: Colors.white),
             ),
-            const ListTile(
-              title: Text("Our Social Media"),
-              leading: Icon(Icons.facebook),
+             ListTile(
+              tileColor: MyColors.primaryColor,
+              title: const Text("Our Social Media"),
+              leading: const Icon(Icons.facebook,color: Colors.white),
             ),
             ListTile(
+              tileColor: MyColors.primaryColor,
               onTap: () => Get.back(),
               title: const Text("Share App"),
-              leading: const Icon(Icons.share),
+              leading: const Icon(Icons.share,color: Colors.white),
             ),
             ListTile(
+              tileColor: MyColors.primaryColor,
               onTap: (){
 
               },
               title: const Text("Logout"),
-              leading: const Icon(Icons.logout),
+              leading: const Icon(Icons.logout,color: Colors.red),
             ),
           ],
         )

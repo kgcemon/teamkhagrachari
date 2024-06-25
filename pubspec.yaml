@@ -18,8 +18,10 @@ dependencies:
   flutter_widget_from_html_core: ^0.14.11
   lecle_flutter_carousel_pro: ^0.0.3
   cached_network_image: ^3.3.1
-  lottie:
-  get:
+  lottie: ^3.1.2
+  get: ^4.6.6
+  intl: any
+  flutter_staggered_animations: ^1.1.1
 
 
 dev_dependencies:

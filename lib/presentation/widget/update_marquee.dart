@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
@@ -44,11 +45,15 @@ class UpdateNewsMarquee extends StatelessWidget {
             ? LinearProgressIndicator(
                 color: MyColors.primaryColor,
               )
-            : Marquee(
-                style: const TextStyle(color: Colors.white70),
-                text: ' ${'1. ${value.newsList[0].title ?? ''}'
-                    ' 2. ${value.newsList[1].title ?? ''} '
-                    ' 3. ${value.newsList[2].title ?? ''}'} '),
+            : value.newsList.isNotEmpty
+                ? Marquee(
+                    style: const TextStyle(color: Colors.white70),
+                    text: ' ${'1. ${value.newsList[0].title ?? ''}'
+                        ' 2. ${value.newsList[1].title ?? ''} '
+                        ' 3. ${value.newsList[2].title ?? ''}'} ')
+                : const CupertinoActivityIndicator(
+                    color: Colors.white,
+                  ),
       ),
     );
   }

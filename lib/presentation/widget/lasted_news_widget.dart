@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/home_screen_controller.dart';
@@ -21,7 +23,7 @@ class LastedNewsWidget extends StatelessWidget {
             shrinkWrap: true,
             itemCount: value.newsList.length,
             itemBuilder: (context, index) => SizedBox(
-              width: 160,
+              width: 140,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: GestureDetector(
@@ -34,12 +36,13 @@ class LastedNewsWidget extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Image.network(
-                        value.newsList[index].thumbnail,
-                        fit: BoxFit.fitWidth,
-                        height: 80,
+                      CachedNetworkImage(
+                        imageUrl: value.newsList[index].thumbnail,height: 80,
                         width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const CupertinoActivityIndicator(),
                       ),
+
                       const SizedBox(
                         height: 10,
                       ),

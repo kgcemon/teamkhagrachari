@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:teamkhagrachari/data/model/CategoryModel.dart';
-import 'package:teamkhagrachari/data/model/news_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
-import 'package:teamkhagrachari/data/urls..dart';
+import 'package:teamkhagrachari/data/model/news_model.dart';
+import 'package:teamkhagrachari/data/model/slider_image_model.dart';
+import '../../data/model/CategoryModel.dart';
+import '../../data/network_caller/network_caller.dart';
+import '../../data/urls..dart';
 
 class HomeScreenController extends GetxController {
   String username = '';
@@ -20,51 +21,86 @@ class HomeScreenController extends GetxController {
 
   bool get loadingProgress => _loadingProgress;
 
-  void loadAll() async {
-    await fetchAllCategory();
-    await loadNews();
+  final List<String> _sliderImageList = [];
+
+  List<String> get sliderImageList => _sliderImageList;
+
+  Future<void> loadAll({required Function(double) onProgress}) async {
+    double progress = 0.0;
+    onProgress(progress);
+
+    await _fetchAllCategory((newProgress) {
+      progress = newProgress;
+      onProgress(progress);
+    });
+
+    await _getImageLoad((newProgress) {
+      progress = newProgress;
+      onProgress(progress);
+    });
+
+    _loadingProgress = false;
+    update();
   }
 
-  Future<void> fetchAllCategory() async {
-    try {
-      final response = await NetworkCaller.getRequest(url: ApiUrl.categoryUrl);
-      if (response.responseCode == 200) {
-        _category.clear();
-        _category = categoryModelFromJson(
-          jsonEncode(response.responseData['data']['data']),
-        );
-        update();
-      } else {
-        if (kDebugMode) {
-          print(
-              'Failed to load categories with status code: ${response.responseCode}');
+  Future<void> _fetchAllCategory(Function(double) onProgress) async {
+    if (_category.isEmpty) {
+      try {
+        final response =
+            await NetworkCaller.getRequest(url: ApiUrl.categoryUrl);
+        if (response.responseCode == 200) {
+          _category.clear();
+          _category = categoryModelFromJson(
+            jsonEncode(response.responseData['data']['data']),
+          );
+          onProgress(50.0);
+          update();
+        } else {
+          if (kDebugMode) {
+            print(
+                'Failed to load categories with status code: ${response.responseCode}');
+          }
         }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('An error occurred: $e');
+      } catch (e) {
+        if (kDebugMode) {
+          print('An error occurred: $e');
+        }
       }
     }
   }
 
-  Future<void> loadNews() async {
-    _newsList.clear();
-    try {
-      final response = await http.get(Uri.parse(ApiUrl.newsApiUrl));
-
-      if (response.statusCode == 200) {
-        List<dynamic> responseList = jsonDecode(response.body);
-        _newsList =
-            responseList.map((element) => NewsModel.fromJson(element)).toList();
-        _loadingProgress = false;
-        update();
-      } else {
-        Get.snackbar("Ops", response.statusCode.toString());
-        _loadingProgress = false;
+  Future<void> _getImageLoad(Function(double) onProgress) async {
+    if (_sliderImageList.isEmpty) {
+      var response = await NetworkCaller.getRequest(url: ApiUrl.sliderImgUrls);
+      var data = SliderImageModel.fromJson(response.responseData);
+      _sliderImageList.clear();
+      for (int i = 0; i < data.data.length; i++) {
+        _sliderImageList.add(data.data[i].img);
       }
-    } catch (e) {
-      _loadingProgress = false;
-      Get.snackbar("Ops", e.toString());
+      onProgress(100.0);
+      update();
+    }
+  }
+
+  Future<void> loadNews() async {
+    if (_newsList.isEmpty) {
+      try {
+        final response = await http.get(Uri.parse(ApiUrl.newsApiUrl));
+        if (response.statusCode == 200) {
+          List<dynamic> responseList = jsonDecode(response.body);
+          _newsList = responseList
+              .map((element) => NewsModel.fromJson(element))
+              .toList();
+          _loadingProgress = false;
+          update();
+        } else {
+          Get.snackbar("Oops", response.statusCode.toString());
+          _loadingProgress = false;
+        }
+      } catch (e) {
+        _loadingProgress = false;
+        Get.snackbar("Oops", e.toString());
+      }
     }
   }
 }

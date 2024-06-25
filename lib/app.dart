@@ -3,19 +3,21 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:teamkhagrachari/controller_binder.dart';
 import 'package:teamkhagrachari/presentation/screen/auth/splash_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
+
+
 class TeamKhagrachari extends StatelessWidget {
   const TeamKhagrachari({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialBinding: ControllerBinder(),
       theme: ThemeData(
-        listTileTheme: const ListTileThemeData(
+        iconTheme: const IconThemeData(color: Colors.white),
+        listTileTheme:  const ListTileThemeData(
           leadingAndTrailingTextStyle: TextStyle(color: Colors.white),
           subtitleTextStyle: TextStyle(color: Colors.white70),
           titleTextStyle: TextStyle(color: Colors.white),
-            tileColor: Colors.white24),
+          ),
         colorSchemeSeed: MyColors.white,
         scaffoldBackgroundColor: MyColors.primaryColor,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -43,7 +45,8 @@ class TeamKhagrachari extends StatelessWidget {
             minimumSize: const Size(double.infinity, 45),
           ),
         ),
-        appBarTheme:  AppBarTheme(
+        appBarTheme: AppBarTheme(
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: MyColors.secenderyColor,
           centerTitle: true,
         ),
