@@ -19,6 +19,40 @@ class _BloodScreenState extends State<BloodScreen> {
   String selectedUpazila = 'উপজেলা';
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => loadDialoge(),
+    );
+  }
+
+  loadDialoge() async {
+    Get.defaultDialog(
+      backgroundColor: MyColors.primaryColor,
+      titleStyle: const TextStyle(color: Colors.white),
+      title: "রক্তদাতা খুঁজছেন?",
+      actions: [
+        TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              "ঠিক আছে",
+              style: TextStyle(color: Colors.white),
+            ))
+      ],
+      content: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Text(
+          "★ যে রক্তের গ্রুপগুলো সবুজ রঙের বৃত্তের ভেতর, তাঁরা রক্ত দেওয়ার জন্যে এভেইলেবল আছেন। \n ★ যে রক্তের গ্রুপগুলো লাল রঙের বৃত্তের ভেতর, তাঁদের রক্ত দেওয়ার সময় এখনো হয়নি। \n ★ রক্তদাতাকে সালাম দিয়ে শুরুতেই বলুন, Khagrachari Plus থেকে আপনার নাম্বার সংগ্রহ করেছি। আপনি কি আজ রক্ত দিতে পারবেন?\n★ রক্তদাতার সাথে সর্বোচ্চ ভদ্রতার সহিত সম্মান দিয়ে কথা বলবেন। সামর্থ্য থাকলে ব্লাড দেওয়া শেষে চেষ্টা করবেন রক্তদাতাকে একটি ডাব খাওয়ানোর।\n★রক্তদান পরবর্তী ন্যুনতম ১ সপ্তাহ পর রক্তদাতার শারিরীক অবস্থার খোঁজ নেওয়ার চেষ্টা করবেন। সুসম্পর্ক বজায় রাখার চেষ্টা করবেন।",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
@@ -101,7 +135,7 @@ class _BloodScreenState extends State<BloodScreen> {
                           'দীঘিনালা',
                           'মানিকছড়ি',
                           'লক্ষীছড়ি',
-                          'মাইসছড়ি',
+                          'মহালছড়ি',
                           'গুইমারা',
                           'রামগড়'
                         ].map<DropdownMenuItem<String>>((String value) {
@@ -148,7 +182,8 @@ class _BloodScreenState extends State<BloodScreen> {
                               verticalOffset: 50.0,
                               child: FadeInAnimation(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5.0),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(color: textColor),
@@ -160,12 +195,13 @@ class _BloodScreenState extends State<BloodScreen> {
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       tileColor: Colors.transparent,
-                                      onTap: () => _popup(donor,textColor),
+                                      onTap: () => _popup(donor, textColor),
                                       leading: CircleAvatar(
                                         backgroundColor: textColor,
                                         child: Text(
                                           donor.bloodGroup ?? '',
-                                          style: TextStyle(color: MyColors.white),
+                                          style:
+                                              TextStyle(color: MyColors.white),
                                         ),
                                       ),
                                       title: Text(
@@ -205,13 +241,11 @@ class _BloodScreenState extends State<BloodScreen> {
     );
   }
 
-
-  _popup(var donor, var textColor){
+  _popup(var donor, var textColor) {
     Get.defaultDialog(
-      title: "Donors Details",
+      title: "রক্তদাতার বিবরণ",
       backgroundColor: MyColors.primaryColor,
-      titleStyle:
-      TextStyle(color: MyColors.white),
+      titleStyle: TextStyle(color: MyColors.white),
       content: Column(
         children: [
           const CircleAvatar(
@@ -226,43 +260,41 @@ class _BloodScreenState extends State<BloodScreen> {
           ),
           const SizedBox(height: 10),
           _buildPopUp(
-            donor.lastDonateDate
-                ?.split(" ")[0] ??
-                '',
-            "Last Donate Date:",
+            donor.lastDonateDate?.split("T")[0] ?? '',
+            "সর্বশেষ রক্তদানের তারিখ:",
             textColor,
           ),
           _buildPopUp(
             donor.upazila ?? '',
-            "Upazila:",
+            "উপজেলা:",
           ),
           _buildPopUp(
             donor.phone ?? '',
-            "Phone:",
+            "ফোন:",
           ),
         ],
       ),
       actions: [
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
+            minimumSize: const Size(70, 40),
             backgroundColor: Colors.green,
           ),
-          onPressed: () {},
-          icon: const Icon(Icons.call),
-          label: const Text("Call"),
+          onPressed: () => uriLaunchUrl('tel:${donor.phone ?? ''}'),
+          icon: const Icon(Icons.call,color: Colors.white,),
+          label: const Text("Call",style: TextStyle(color: Colors.white),),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-            MyColors.primaryColor,
+            minimumSize: const Size(70, 40),
+            backgroundColor: Colors.red,
           ),
           onPressed: () {
             Get.back();
           },
           child: const Text(
             "Cancel",
-            style:
-            TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ],

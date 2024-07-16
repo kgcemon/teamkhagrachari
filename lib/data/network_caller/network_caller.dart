@@ -85,6 +85,44 @@ class NetworkCaller {
     }
   }
 
+
+  static Future<NetworkResponse> patchRequest(
+      {required String url, Map<String, dynamic>? body}) async {
+    try {
+      log(url);
+      final Response response = await patch(Uri.parse(url),
+          headers: {
+            'Authorization': UserAuthController.accessToken,
+            'accept': 'application/json'
+          },
+          body: body);
+      log(response.statusCode.toString());
+      log(response.body.toString());
+      if (response.statusCode == 200) {
+        final decodedData = jsonDecode(response.body);
+        return NetworkResponse(
+            responseCode: response.statusCode,
+            isSuccess: true,
+            responseData: decodedData);
+      } else if (response.statusCode == 401) {
+        _goToSignInScreen();
+        return NetworkResponse(
+          responseCode: response.statusCode,
+          isSuccess: false,
+        );
+      } else {
+        return NetworkResponse(
+          responseCode: response.statusCode,
+          isSuccess: false,
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      return NetworkResponse(
+          responseCode: -1, isSuccess: false, errorMessage: e.toString());
+    }
+  }
+
   static void _goToSignInScreen() {
     Getx.Get.to(() => const LoginScreen());
   }

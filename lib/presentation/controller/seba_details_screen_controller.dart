@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/data/model/seba_details_model.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
-
 import '../../data/urls..dart';
 
 class SebaDetailsScreenController extends GetxController {
@@ -11,7 +10,8 @@ class SebaDetailsScreenController extends GetxController {
 
   Future<SebaDetailsModel> fetchSebaDetails(String id) async {
     progress.value = true;
-    final response = await NetworkCaller.getRequest(url: ApiUrl.categoryDetailsUrl + id);
+    final response =
+        await NetworkCaller.getRequest(url: ApiUrl.categoryDetailsUrl + id);
     sebaDetails.value = SebaDetailsModel.fromJson(response.responseData);
     filteredDetails.value = sebaDetails.value.data?.data ?? [];
     progress.value = false;
@@ -19,16 +19,15 @@ class SebaDetailsScreenController extends GetxController {
   }
 
   void filterDetails(String query) {
-    if (query.isEmpty) {
+    if (query.isEmpty || query == "উপজেলা") {
       filteredDetails.value = sebaDetails.value.data?.data ?? [];
     } else {
       filteredDetails.value = sebaDetails.value.data?.data
-          ?.where((item) =>
-      item.serviceProviderName
-          ?.toLowerCase()
-          .contains(query.toLowerCase()) ?? false ||
-          item.name!.toLowerCase().contains(query.toLowerCase()))
-          .toList() ?? [];
+              ?.where((item) =>
+                  item.name!.contains(query.toLowerCase()) ||
+                  item.location == query)
+              .toList() ??
+          [];
     }
   }
 }

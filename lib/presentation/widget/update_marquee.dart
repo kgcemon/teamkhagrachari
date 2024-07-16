@@ -2,11 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
-import 'package:teamkhagrachari/presentation/controller/home_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
+import '../controller/scroll_text_controller.dart';
 
-class UpdateNewsMarquee extends StatelessWidget {
+class UpdateNewsMarquee extends StatefulWidget {
   const UpdateNewsMarquee({super.key});
+
+  @override
+  State<UpdateNewsMarquee> createState() => _UpdateNewsMarqueeState();
+}
+
+class _UpdateNewsMarqueeState extends State<UpdateNewsMarquee> {
+  HomePageScrollTextController controller = HomePageScrollTextController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getLoadScrollText();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,20 +53,13 @@ class UpdateNewsMarquee extends StatelessWidget {
 
   Expanded buildExpanded() {
     return Expanded(
-      child: GetBuilder<HomeScreenController>(
-        builder: (value) => value.loadingProgress == true
-            ? LinearProgressIndicator(
-                color: MyColors.primaryColor,
-              )
-            : value.newsList.isNotEmpty
-                ? Marquee(
-                    style: const TextStyle(color: Colors.white70),
-                    text: ' ${'1. ${value.newsList[0].title ?? ''}'
-                        ' 2. ${value.newsList[1].title ?? ''} '
-                        ' 3. ${value.newsList[2].title ?? ''}'} ')
-                : const CupertinoActivityIndicator(
-                    color: Colors.white,
-                  ),
+      child: Obx(
+        () => controller.filteredDetails.value.data == null
+            ? const CupertinoActivityIndicator()
+            : Marquee(
+                style: const TextStyle(
+                    color: Colors.white70, fontFamily: 'banglafont'),
+                text: '${controller.filteredDetails.value.data?[0].text}'),
       ),
     );
   }

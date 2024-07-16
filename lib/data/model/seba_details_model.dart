@@ -6,22 +6,11 @@ class SebaDetailsModel {
 
   SebaDetailsModel({this.statusCode, this.success, this.message, this.data});
 
-  SebaDetailsModel.fromJson(Map<String, dynamic> json) {
+  SebaDetailsModel.fromJson(Map json) {
     statusCode = json['statusCode'];
     success = json['success'];
     message = json['message'];
     data = json['data'] != null ? SebaData.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
   }
 }
 
@@ -31,7 +20,7 @@ class SebaData {
 
   SebaData({this.meta, this.data});
 
-  SebaData.fromJson(Map<String, dynamic> json) {
+  SebaData.fromJson(Map json) {
     meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
     if (json['data'] != null) {
       data = <SebaDetailsDataListModel>[];
@@ -39,17 +28,6 @@ class SebaData {
         data!.add(SebaDetailsDataListModel.fromJson(v));
       });
     }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (meta != null) {
-      data['meta'] = meta!.toJson();
-    }
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
   }
 }
 
@@ -60,14 +38,14 @@ class Meta {
 
   Meta({this.page, this.limit, this.total});
 
-  Meta.fromJson(Map<String, dynamic> json) {
+  Meta.fromJson(Map json) {
     page = json['page'];
     limit = json['limit'];
     total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['page'] = page;
     data['limit'] = limit;
     data['total'] = total;
@@ -79,6 +57,7 @@ class SebaDetailsDataListModel {
   String? sId;
   String? name;
   String? description;
+  String? addressDegree;
   String? phone;
   String? email;
   String? serviceProviderName;
@@ -87,10 +66,12 @@ class SebaDetailsDataListModel {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  bool? status;
 
   SebaDetailsDataListModel(
       {this.sId,
         this.name,
+        this.addressDegree,
         this.description,
         this.phone,
         this.email,
@@ -99,11 +80,14 @@ class SebaDetailsDataListModel {
         this.servicesCategory,
         this.createdAt,
         this.updatedAt,
+        this.status,
         this.iV});
 
-  SebaDetailsDataListModel.fromJson(Map<String, dynamic> json) {
+  SebaDetailsDataListModel.fromJson(Map json) {
     sId = json['_id'];
     name = json['name'];
+    status = json['status'];
+    addressDegree = json['addressDegree'];
     description = json['description'];
     phone = json['phone'];
     email = json['email'];
@@ -115,24 +99,6 @@ class SebaDetailsDataListModel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['name'] = name;
-    data['description'] = description;
-    data['phone'] = phone;
-    data['email'] = email;
-    data['serviceProviderName'] = serviceProviderName;
-    data['location'] = location;
-    if (servicesCategory != null) {
-      data['servicesCategory'] = servicesCategory!.toJson();
-    }
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    return data;
   }
 }
 
@@ -154,7 +120,7 @@ class ServicesCategory {
         this.updatedAt,
         this.iV});
 
-  ServicesCategory.fromJson(Map<String, dynamic> json) {
+  ServicesCategory.fromJson(Map json) {
     sId = json['_id'];
     name = json['name'];
     img = json['img'];
@@ -162,17 +128,5 @@ class ServicesCategory {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['name'] = name;
-    data['img'] = img;
-    data['description'] = description;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    return data;
   }
 }

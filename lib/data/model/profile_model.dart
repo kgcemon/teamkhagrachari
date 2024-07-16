@@ -1,4 +1,3 @@
-import 'dart:async';
 
 class ProfileModel {
   int? statusCode;
@@ -17,6 +16,8 @@ class ProfileModel {
 class ProfileData {
   String? sId;
   String? email;
+  bool? isDonor;
+  String? bloodGroup;
   String? name;
   String? phone;
   String? upazila;
@@ -28,6 +29,8 @@ class ProfileData {
   ProfileData(
       {this.sId,
         this.email,
+        this.isDonor,
+        this.bloodGroup,
         this.name,
         this.phone,
         this.upazila,
@@ -38,6 +41,8 @@ class ProfileData {
 
   ProfileData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    isDonor = json['isDonor'];
+    bloodGroup = json['bloodGroup'];
     email = json['email'];
     name = json['name'];
     phone = json['phone'];

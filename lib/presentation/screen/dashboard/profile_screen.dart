@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:teamkhagrachari/bangla_convertor.dart';
+import 'package:teamkhagrachari/presentation/add_user_service_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/screen/profile/profile_update_screen.dart';
+import 'package:teamkhagrachari/presentation/screen/profile/user_profile_service.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import '../../controller/user_auth_controller.dart';
 import '../../widget/url_luncher.dart';
@@ -53,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(5), 
+                                padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(90)),
@@ -64,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 60,
                                   ),
                                 )),
-
                             const AppbarPopUpMenuWidget()
                           ],
                         ),
@@ -77,7 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.location_on,size: 11,color: Colors.white,),
+                            const Icon(
+                              Icons.location_on,
+                              size: 11,
+                              color: Colors.white,
+                            ),
                             Text(
                               controller.profileData.data?.upazila ?? "",
                               style: TextStyle(
@@ -86,15 +92,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-
                         Row(
                           children: [
-                            const Icon(Icons.call,color: Colors.white,size: 11,),
-                            const SizedBox(width: 3,),
-                            Text( controller.profileData.data?.phone ?? "",style: const TextStyle(fontSize: 11,color: Colors.white),),
+                            const Icon(
+                              Icons.call,
+                              color: Colors.white,
+                              size: 11,
+                            ),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            Text(
+                              controller.profileData.data?.phone ?? "",
+                              style: const TextStyle(
+                                  fontSize: 11, color: Colors.white),
+                            ),
                           ],
                         ),
-
                         const SizedBox(
                           height: 10,
                         ),
@@ -104,7 +118,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.orange),
-                                  onPressed: () {},
+                                  onPressed: () => Get.to(
+                                      () => const AddUserServiceScreen()),
                                   child: const Text(
                                     "সেবা যুক্ত করুন",
                                     style: TextStyle(color: Colors.white),
@@ -117,7 +132,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.snackbar("Coming..", "coming soon");
+                                  },
                                   child: const Text(
                                     "পণ্য বিক্রি করুন",
                                     style: TextStyle(color: Colors.white),
@@ -131,10 +148,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const ProfileItem(
-                      label: 'আপনার সেবা সমুহ',
-                      value: "আপনার সকল সেবা সেখতে ক্লিক করুন",
-                      iconData: Icons.local_activity),
+                  InkWell(
+                    onTap: () => Get.to(()=> const UserProfileServiceScreen()),
+                    child: const ProfileItem(
+                        label: 'আপনার সেবা সমুহ',
+                        value: "আপনার সকল সেবা সেখতে ক্লিক করুন",
+                        iconData: Icons.local_activity),
+                  ),
                   ProfileItem(
                     label: 'সর্বশেষ রক্তদানের তারিখ:',
                     value: BanglaConvertor.convertPrice(
@@ -149,25 +169,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   ProfileItem(
                     label: 'পরবর্তী রক্তদানের তারিখ:',
-                    value: "${ BanglaConvertor.convertPrice(
+                    value: "${BanglaConvertor.convertPrice(
                       DateFormat('dd/MM/yyyy').format(
                         DateTime.parse(controller
-                            .profileData.data!.lastDonateDate
-                            .toString())
+                                .profileData.data!.lastDonateDate
+                                .toString())
                             .toLocal()
-                            .add(
-                          const Duration(days: 120),
-                        ),
+                            .add(const Duration(days: 120)),
                       ),
-                    )} (${BanglaConvertor.convertPrice(DateTime.parse(controller
-                        .profileData.data!.lastDonateDate
-                        .toString()).difference(DateTime.parse(controller
-                        .profileData.data!.lastDonateDate
-                        .toString())
-                        .toLocal()
-                        .add(
-                      const Duration(days: 120),
-                    )).inDays.toString().split("-")[1])} দিন বাকি)",
+                    )} (${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString()).contains("-") ? "আপনি এখন রক্ত দিতে পারবেন" : "${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString())}দিন বাকি"})",
                     iconData: Icons.date_range,
                   ),
                 ],
@@ -202,12 +212,14 @@ class ProfileItem extends StatelessWidget {
           color: Colors.white,
         ),
         title: Text(label),
-        subtitle: Text(value,style: const TextStyle(fontSize: 11),),
+        subtitle: Text(
+          value,
+          style: const TextStyle(fontSize: 11),
+        ),
       ),
     );
   }
 }
-
 
 class AppbarPopUpMenuWidget extends StatelessWidget {
   const AppbarPopUpMenuWidget({
@@ -217,6 +229,8 @@ class AppbarPopUpMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+      color: MyColors.primaryColor,
+      shadowColor: Colors.transparent,
       icon: const Icon(
         Icons.more_vert,
         color: Colors.white,
@@ -224,54 +238,43 @@ class AppbarPopUpMenuWidget extends StatelessWidget {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-            value: "Privacy Policy",
-            child: Row(
+            onTap: () => Get.to(() => ProfileUpdateScreen(
+                  profileData: Get.find<ProfileScreenController>().profileData,
+                )),
+            value: "Profile Edit",
+            child: const Row(
               children: [
-                Icon(Icons.privacy_tip, color: MyColors.primaryColor,),
-                const Text(" Privacy Policy"),
+                Icon(Icons.edit, color: Colors.white),
+                Text(
+                  " Profile Edit",
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
-          PopupMenuItem(
-            value: "Contact",
-            child: Row(
-              children: [
-                Icon(Icons.help, color: MyColors.primaryColor),
-                const Text(" Contact Us"),
-              ],
-            ),
-          ),
-          PopupMenuItem(
-            value: "Remove Account",
-            child: Row(
-              children: [
-                Icon(Icons.remove_circle, color: MyColors.primaryColor),
-                const Text(" Remove Account"),
-              ],
-            ),
-          ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "Log Out",
             child: Row(
               children: [
-                Icon(Icons.logout, color: MyColors.primaryColor,),
-                const Text(" Log Out"),
+                Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                Text(
+                  " Log Out",
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
         ];
       },
       onSelected: (value) {
-        if (value.contains("Privacy Policy")) {
-          launchUrls("https://www.bizeglobal.com/privacy-policy");
-        } else if (value.contains("Log Out")) {
+         if (value.contains("Log Out")) {
           UserAuthController.clearUserData();
           Get.offAll(() => const LoginScreen());
-        } else if (value.contains("Remove Account")) {} else
-        if (value.contains("contact")) {
-          launchUrls("https://www.bizeglobal.com/contact-us");
+        } else if (value.contains("Remove Account")) {
         }
-        print("Selected: $value");
       },
     );
   }

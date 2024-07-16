@@ -1,49 +1,43 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import '../../../data/urls..dart';
 
-
-class RegisterController extends GetxController {
+class UserProfileUpdateController extends GetxController {
   var isProgress = false.obs;
-  bool isDonor = false;
+  bool isDonor = true;
 
-  Future<bool> registerUser({
+  Future<bool> getUserProfileUpdate({
+    required String userid,
     required String email,
-    required String password,
     required String phone,
     required String bloodGroup,
     required String upazila,
     required String name,
+    required String lastDonateDate,
   }) async {
     isProgress.value = true;
     update();
 
     try {
-      final response = await http.post(
-        Uri.parse(ApiUrl.registerUrls),
-        body: {
-          "email": email,
-          "password": password,
-          "phone": phone,
-          "upazila": upazila,
-          "name": name,
-          "bloodGroup": bloodGroup,
-          "lastDonateDate": "2024-01-24T15:34:37.150Z",
-          "isDonor": isDonor.toString(),
-        },
-      );
-
-      final responseBody = jsonDecode(response.body);
+      final response = await NetworkCaller.patchRequest(
+          url: ApiUrl.userProfileUpdateUrl+userid,
+          body: {
+            "email": email,
+            "phone": phone,
+            "upazila": upazila,
+            "name": name,
+            "bloodGroup": bloodGroup,
+            "lastDonateDate": lastDonateDate,
+            "isDonor": isDonor.toString(),
+          });
       isProgress.value = false;
       update();
-
-      if (response.statusCode == 200) {
+      if (response.isSuccess) {
+        update();
         return true;
       } else {
-        _showErrorSnackbar(responseBody["message"]);
+        _showErrorSnackbar(response.responseData["message"]);
         return false;
       }
     } catch (e) {
@@ -55,6 +49,7 @@ class RegisterController extends GetxController {
   }
 
   void setDonorStatus(bool value) {
+
     isDonor = value;
     update();
   }

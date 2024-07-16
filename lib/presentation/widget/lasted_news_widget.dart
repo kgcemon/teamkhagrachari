@@ -51,7 +51,7 @@ class LastedNewsWidget extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            color: Colors.white, fontSize: 11),
+                            color: Colors.white, fontSize: 11,fontFamily: "banglafont"),
                       )
                     ],
                   ),

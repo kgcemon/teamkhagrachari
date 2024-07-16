@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnimationLimiter(
       child: AnimationConfiguration.staggeredList(
         position: i,
-        duration: const Duration(milliseconds: 1300),
+        duration: const Duration(milliseconds: 500),
         child: SlideAnimation(
           verticalOffset: 50.0,
           child: FadeInAnimation(
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       dedicatedServicesList[i]['name'],
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(fontSize: 12, color: Colors.white,fontFamily: "banglafont"),
                     ),
                   ],
                 ),
@@ -171,9 +171,13 @@ class ImageSliderWidget extends StatelessWidget {
           child: sliderImagesList.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : Carousel(
+            dotSize: 5,
+                  dotSpacing: 15,
+                  dotPosition: DotPosition.values[DotPosition.bottomCenter.index],
                   boxFit: BoxFit.cover,
                   dotBgColor: Colors.transparent,
                   dotColor: Colors.white,
+                dotVerticalPadding: -15,
                   images: sliderImagesList
                       .map(
                         (url) => ClipRRect(

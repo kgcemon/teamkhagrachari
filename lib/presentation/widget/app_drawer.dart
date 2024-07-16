@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
+import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
+import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/about_us_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
+import 'package:teamkhagrachari/presentation/utils/local_storage.dart';
+import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
 
+import '../controller/user_auth_controller.dart';
+import '../screen/profile/profile_update_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -12,50 +20,64 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: MyColors.primaryColor,
+        backgroundColor: MyColors.primaryColor,
         child: ListView(
           children: [
             Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                    onTap: () => Get.back(),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18.0),
-                      child: Icon(Icons.close),
-                    ))),
-              ListTile(
-                tileColor: MyColors.primaryColor,
-               onTap: () => Get.to(()=> const AboutUsPage()),
-              title: const Text("About Us",),
-              leading: const Icon(Icons.info_outline,color: Colors.white),
+              alignment: Alignment.topRight,
+              child: InkWell(
+                onTap: () => Get.back(),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Icon(Icons.close),
+                ),
+              ),
             ),
-             ListTile(
+            ListTile(
               tileColor: MyColors.primaryColor,
-              selectedColor: Colors.red,
-              title: const Text("Contact Us",),
-              leading: const Icon(Icons.sms,color: Colors.white),
+              onTap: () => Get.to(() => ProfileUpdateScreen(
+                profileData: Get.find<ProfileScreenController>().profileData,
+              )),
+              title: const Text(
+                "Update Profile",
+              ),
+              leading: const Icon(Icons.person, color: Colors.white),
             ),
-             ListTile(
+            ListTile(
+              tileColor: MyColors.primaryColor,
+              onTap: () => Get.to(() => const AboutUsPage()),
+              title: const Text(
+                "About Us",
+              ),
+              leading: const Icon(Icons.info_outline, color: Colors.white),
+            ),
+            ListTile(
+              onTap: () =>
+                  uriLaunchUrl("https://facebook.com/groups/khagrachariplus/"),
               tileColor: MyColors.primaryColor,
               title: const Text("Our Social Media"),
-              leading: const Icon(Icons.facebook,color: Colors.white),
+              leading: const Icon(Icons.facebook, color: Colors.white),
             ),
             ListTile(
               tileColor: MyColors.primaryColor,
-              onTap: () => Get.back(),
-              title: const Text("Share App"),
-              leading: const Icon(Icons.share,color: Colors.white),
-            ),
-            ListTile(
-              tileColor: MyColors.primaryColor,
-              onTap: (){
-
+              onTap: () async {
+                final result = await Share.share(
+                    'খাগড়াছড়িতে একের ভেতর সকল সেবা পেতে এখনি ডাউনলোড করুন  https://play.google.com/store/apps/details?id=org.khagrachari.seba.teamkhagrachari');
+                if (result.status == ShareResultStatus.success) {
+                  Get.snackbar("Thanks", "Thanks for share our app");
+                }
               },
-              title: const Text("Logout"),
-              leading: const Icon(Icons.logout,color: Colors.red),
+              title: const Text("Share App"),
+              leading: const Icon(Icons.share, color: Colors.white),
+            ),
+            ListTile(
+              tileColor: MyColors.primaryColor,
+              onTap: () => uriLaunchUrl(
+                  "https://khagrachariplus.com/privacy-policy.html"),
+              title: const Text("Privacy Policy"),
+              leading: const Icon(Icons.privacy_tip, color: Colors.green),
             ),
           ],
-        )
-    );
+        ));
   }
 }

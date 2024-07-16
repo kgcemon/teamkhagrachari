@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:teamkhagrachari/data/model/seba_details_model.dart';
-
 import '../utils/uri_luncher.dart';
 
 Widget buildSebaCallList(
@@ -27,17 +28,27 @@ Widget buildSebaCallList(
                 borderRadius: BorderRadius.circular(10),
               ),
               child: ExpansionTile(
-                backgroundColor:  Colors.white.withOpacity(0.13),
-                title: Text(
-                  sebaDetailsList[index].serviceProviderName ?? 'No name',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                backgroundColor: Colors.white.withOpacity(0.13),
+                title: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: sebaDetailsList[index].location,
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.green),
+                      )
+                    ],
+                    text:
+                        sebaDetailsList[index].serviceProviderName ?? 'No name',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 subtitle: Text(
-                  sebaDetailsList[index].name ?? '',
+                  sebaDetailsList[index].addressDegree ?? '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontStyle: FontStyle.italic,
@@ -45,8 +56,26 @@ Widget buildSebaCallList(
                   ),
                 ),
                 trailing: InkWell(
-                  onTap: () =>
-                      uriLaunchUrl('tel:${sebaDetailsList[index].phone}'),
+                  onTap: () {
+                    Get.defaultDialog(
+                      backgroundColor: Colors.grey[850],
+                      titleStyle: const TextStyle(color: Colors.white),
+                      title: "নোটিশ",
+                      content: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "সেবাদাতাকে সালাম দিয়ে শুরুতেই বলুন, আমি Khagrachari Plus থেকে আপনার ফোন নাম্বার পেয়েছি। আমার সেবা প্রয়োজন।",style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      confirm: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                        onPressed: () {
+                          uriLaunchUrl('tel:${sebaDetailsList[index].phone}');
+                        },
+                        child: const Text("কল করুন",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                      ),
+                    );
+                  },
                   child: const Icon(
                     Icons.call,
                     size: 35,

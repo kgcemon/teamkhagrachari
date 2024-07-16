@@ -61,7 +61,7 @@ class AboutUsPage extends StatelessWidget {
               const SizedBox(height: 20),
               buildSectionTitle("Founder's Inspiration"),
               buildSectionContent(
-                "Khagrachari Plus is the brainchild of Hasanul Karim, a visionary entrepreneur with a deep love for his district. Inspired by the beauty and resilience of Khagrachari and fueled by a desire to make a tangible difference, Hasanul embarked on a journey to create a platform that would redefine convenience and connectivity for the community.",
+                "Khagrachari Plus is the brainchild of Hasanul Karim, a visionary entrepreneur with a deep love for his district. Inspired by the beauty and resilience of Khagrachari and fueled by a desire to make a tangible difference, Hasanul embarked on a journey to create a platform that would redefine convenience and connectivity for the community. With a solid educational foundation, Hasanul Karim completed his Bachelor of Business Administration (BBA) and Master of Business Administration (MBA) in the management department at Rangamati Science & Technology University. His educational background complements his entrepreneurial spirit, enabling him to lead with knowledge and innovation in his quest to make a positive impact on his beloved Khagrachari district.",
               ),
               const SizedBox(height: 20),
               buildSectionTitle("Founder's Commitment"),

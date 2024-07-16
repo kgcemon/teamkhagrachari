@@ -1,40 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:teamkhagrachari/presentation/controller/auth/register_screen_controller.dart';
-import 'package:teamkhagrachari/presentation/screen/auth/login_screen.dart';
-import '../../../data/upozila.dart';
+import '../../../../data/upozila.dart';
+import '../../../data/model/profile_model.dart';
 import '../../controller/auth/login_controller.dart';
+import '../../controller/profile_screen_controller.dart';
+import '../../controller/user_profile_update_controller.dart';
 import '../../utils/color.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+class ProfileUpdateScreen extends StatefulWidget {
+  final ProfileModel profileData;
+
+  const ProfileUpdateScreen({super.key, required this.profileData});
 
   @override
-  RegistrationScreenState createState() => RegistrationScreenState();
+  ProfileUpdateScreenState createState() => ProfileUpdateScreenState();
 }
 
-class RegistrationScreenState extends State<RegistrationScreen> {
+class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController upozilaController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   String bloodGroup = '';
   String upazila = '';
   LoginController controller = LoginController();
 
-
+  @override
+  void initState() {
+    nameController.text = widget.profileData.data!.name.toString();
+    emailController.text = widget.profileData.data!.email.toString();
+    phoneController.text = widget.profileData.data!.phone.toString();
+    upozilaController.text = widget.profileData.data!.upazila.toString();
+    dateController.text = widget.profileData.data!.lastDonateDate.toString();
+    bloodGroup = widget.profileData.data!.bloodGroup.toString();
+    upazila = widget.profileData.data!.upazila.toString();
+    Get.find<UserProfileUpdateController>().isDonor =
+        bool.parse(widget.profileData.data!.isDonor.toString());
+    super.initState();
+  }
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
-    passwordController.dispose();
     emailController.dispose();
     phoneController.dispose();
     upozilaController.dispose();
+    dateController.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        dateController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
   }
 
   @override
@@ -42,7 +71,7 @@ class RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Register",
+          "Update Profile",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -78,6 +107,7 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        enabled: false,
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(color: MyColors.white),
@@ -110,21 +140,56 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         keyboardType: TextInputType.phone,
                         validator: (value) {
+                          if (value!.isEmpty ||
+                              value.length < 9 ||
+                              value.length > 14) {
+                            return 'আপনার ফোন নাম্বার সঠিক নয়';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: dateController,
+                        style: TextStyle(color: MyColors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: MyColors.secenderyColor,
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: 'সর্বশেষ রক্তদানের তারিখ',
+                          labelStyle: TextStyle(color: MyColors.white),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.calendar_today,
+                                color: MyColors.white),
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                          ),
+                        ),
+                        readOnly: true,
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your phone number';
+                            return 'Please select date';
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 15),
                       DropdownButtonFormField<String>(
-                        icon: const Icon(Icons.bloodtype,color: Colors.red,),
+                        icon: const Icon(
+                          Icons.bloodtype,
+                          color: Colors.red,
+                        ),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyColors.secenderyColor,
                           focusedBorder: inputStyle(),
                           enabledBorder: inputStyle(),
-                          labelText: 'রক্তের গ্রুপ',
+                          labelText: bloodGroup,
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         dropdownColor: MyColors.secenderyColor,
@@ -140,12 +205,6 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                             bloodGroup = newValue!;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select your blood group';
-                          }
-                          return null;
-                        },
                         onSaved: (value) {
                           bloodGroup = value!;
                         },
@@ -157,9 +216,10 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                             "আপনি কি রক্ত দানে আগ্রহি?",
                             style: TextStyle(color: Colors.white),
                           ),
-                          GetBuilder<RegisterController>(
+                          GetBuilder<UserProfileUpdateController>(
                             builder: (controller) => Checkbox(
-                              shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+                              shape: const RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.white)),
                               value: controller.isDonor,
                               onChanged: (value) {
                                 controller.setDonorStatus(value!);
@@ -170,18 +230,31 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       const SizedBox(height: 5),
                       DropdownButtonFormField<String>(
-                        icon: const Icon(Icons.location_on,color: Colors.green,),
+                        icon: const Icon(
+                          Icons.location_on,
+                          color: Colors.green,
+                        ),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: MyColors.secenderyColor,
                           focusedBorder: inputStyle(),
                           enabledBorder: inputStyle(),
-                          labelText: 'উপজেলা',
+                          labelText: upozilaController.text,
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         dropdownColor: MyColors.secenderyColor,
                         style: TextStyle(color: MyColors.white),
-                        items: upozila.map((String group) {
+                        items: [
+                          'খাগড়াছড়ি সদর',
+                          'পানছড়ি',
+                          'মাটিরাঙ্গা',
+                          'দীঘিনালা',
+                          'মানিকছড়ি',
+                          'লক্ষীছড়ি',
+                          'মহালছড়ি',
+                          'গুইমারা',
+                          'রামগড়'
+                        ].map((String group) {
                           return DropdownMenuItem<String>(
                             value: group,
                             child: Text(group),
@@ -192,50 +265,12 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                             upazila = newValue!;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select your upazila';
-                          }
-                          return null;
-                        },
                         onSaved: (value) {
                           upazila = value!;
                         },
                       ),
-                      const SizedBox(height: 15),
-                      Obx(() => TextFormField(
-                        obscureText: controller.obscurePassword.value,
-                        controller: passwordController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'নতুন পাসওয়ার্ড',
-                          labelStyle: TextStyle(color: MyColors.white),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.obscurePassword.value
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: MyColors.white,
-                            ),
-                            onPressed: () {
-                              controller.obscurePasswordChanger();
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      )),
                       const SizedBox(height: 20),
-                      GetBuilder<RegisterController>(
+                      GetBuilder<UserProfileUpdateController>(
                           builder: (controller) => controller
                                       .isProgress.value ==
                                   false
@@ -251,54 +286,37 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       controller
-                                          .registerUser(
+                                          .getUserProfileUpdate(
+                                              userid: widget
+                                                      .profileData.data!.sId ??
+                                                  "",
                                               email: emailController.text,
-                                              password: passwordController.text,
                                               phone: phoneController.text,
                                               bloodGroup: bloodGroup,
                                               upazila: upazila,
-                                              name: nameController.text)
-                                          .then(
-                                        (value) async {
-                                          if (value == true) {
-                                            Get.snackbar(
-                                                backgroundColor: Colors.green.shade500,
-                                                "Success", "Registration Successful");
-                                            Get.offAll(
-                                                () => const LoginScreen());
-                                          }
-                                        },
-                                      );
+                                              name: nameController.text,
+                                              lastDonateDate:
+                                                  dateController.text)
+                                          .then((value) async {
+                                        if (value == true) {
+                                          Get.back();
+                                          Get.snackbar(
+                                              backgroundColor:
+                                                  Colors.green.shade500,
+                                              "Success",
+                                              "Update Successful");
+                                          Get.find<ProfileScreenController>()
+                                              .getProfile();
+                                        }
+                                      });
                                     }
                                   },
                                   child: const Text(
-                                    'Register',
+                                    'Update Profile',
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 )
                               : const CircularProgressIndicator()),
-                      const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "আপনার কি ইতিমধ্যে একাউন্ট আছে?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          const SizedBox(width: 10),
-                          InkWell(
-                            onTap: () => Get.offAll(() => const LoginScreen()),
-                            child: const Text(
-                              "লগইন করুন",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 70),
                     ],
                   ),
                 ),

@@ -6,9 +6,10 @@ import 'package:teamkhagrachari/data/model/CategoryModel.dart';
 import '../../screen/seba_details.dart';
 import '../../utils/color.dart';
 
-class SebaCatagoryCard extends StatelessWidget {
+class SebaCatagoryCard extends StatelessWidget  {
   final String sebaName;
   final List<CategoryModel> sebaList;
+
 
   const SebaCatagoryCard(
       {Key? key, required this.sebaList, required this.sebaName})
@@ -76,7 +77,7 @@ class SebaCatagoryCard extends StatelessWidget {
               child: AnimationConfiguration.staggeredGrid(
                 position: index,
                 columnCount: 3,
-                duration: const Duration(milliseconds: 1500),
+                duration: const Duration(milliseconds: 900),
                 child: FlipAnimation(
                   child: Container(
                     alignment: Alignment.center,
@@ -123,3 +124,4 @@ class SebaCatagoryCard extends StatelessWidget {
     return crossAxisCount > 3 ? 3 : crossAxisCount;
   }
 }
+

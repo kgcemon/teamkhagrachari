@@ -11,7 +11,7 @@ class SaveDataWithLocalStorage {
    return prefs.getString(key);
   }
 
- static clearData()async{
+ static Future clearData()async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
