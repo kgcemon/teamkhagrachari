@@ -9,11 +9,13 @@ class AddUserServiceController extends GetxController {
     required String addressDegree,
     required String description,
     required String categoryID,
+    required String name,
   }) async {
     isProgress = true;
     update();
     NetworkResponse response = await NetworkCaller.postRequest(
       body: {
+        "serviceProviderName": name,
         "description": description,
         "servicesCatagory": categoryID,
         "addressDegree": addressDegree,

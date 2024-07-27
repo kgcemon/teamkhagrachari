@@ -13,7 +13,7 @@ myAppbar({required String name}) {
     backgroundColor: MyColors.secenderyColor,
     title: Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Image.asset(AssetPath.titleImage),
+      child: name.isEmpty ? Image.asset(AssetPath.titleImage) : Text(name,style: const TextStyle(color: Colors.white),),
     ),
     actions: [
       IconButton(

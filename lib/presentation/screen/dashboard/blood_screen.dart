@@ -137,7 +137,9 @@ class _BloodScreenState extends State<BloodScreen> {
                           'লক্ষীছড়ি',
                           'মহালছড়ি',
                           'গুইমারা',
-                          'রামগড়'
+                          'রামগড়',
+                          'ঢাকা',
+                          'চট্টগ্রাম'
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,

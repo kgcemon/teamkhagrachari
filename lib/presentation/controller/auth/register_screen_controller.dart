@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import '../../../data/urls..dart';
 
 
@@ -43,7 +42,8 @@ class RegisterController extends GetxController {
       if (response.statusCode == 200) {
         return true;
       } else {
-        _showErrorSnackbar(responseBody["message"]);
+        _showErrorSnackbar(responseBody["errorMessages"][0]['message']);
+        print(responseBody);
         return false;
       }
     } catch (e) {

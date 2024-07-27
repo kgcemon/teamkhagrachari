@@ -22,6 +22,12 @@ class _UpdateNewsMarqueeState extends State<UpdateNewsMarquee> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(7.0),

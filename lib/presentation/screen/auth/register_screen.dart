@@ -21,8 +21,8 @@ class RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController upozilaController = TextEditingController();
-  String bloodGroup = '';
-  String upazila = '';
+  String bloodGroup = "";
+  String upazila = "";
   LoginController controller = LoginController();
 
 
@@ -116,8 +116,29 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 15),
-                      DropdownButtonFormField<String>(
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "আপনি কি রক্ত দানে আগ্রহি?",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          GetBuilder<RegisterController>(
+                            builder: (controller) => Checkbox(
+                              focusColor: Colors.red,
+                              fillColor: const MaterialStatePropertyAll(Colors.green),
+                              shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+                              value: controller.isDonor,
+                              onChanged: (value) {
+                                controller.setDonorStatus(value!);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                      GetBuilder<RegisterController>(builder: (controller) =>
+                      controller.isDonor == true ?  DropdownButtonFormField<String>(
                         icon: const Icon(Icons.bloodtype,color: Colors.red,),
                         decoration: InputDecoration(
                           filled: true,
@@ -149,26 +170,8 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                         onSaved: (value) {
                           bloodGroup = value!;
                         },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "আপনি কি রক্ত দানে আগ্রহি?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          GetBuilder<RegisterController>(
-                            builder: (controller) => Checkbox(
-                              shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
-                              value: controller.isDonor,
-                              onChanged: (value) {
-                                controller.setDonorStatus(value!);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 5),
+                      ) : const SizedBox()),
+                      const SizedBox(height: 15),
                       DropdownButtonFormField<String>(
                         icon: const Icon(Icons.location_on,color: Colors.green,),
                         decoration: InputDecoration(

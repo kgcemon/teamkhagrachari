@@ -18,6 +18,7 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
 
   TextEditingController addressDegreeController = TextEditingController();
   TextEditingController serviceInfoController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   String categoryID = '';
   String upazila = '';
   List<String> categoryList = [];
@@ -61,6 +62,25 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
+                      TextFormField(
+                        controller: nameController,
+                        style: TextStyle(color: MyColors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.13),
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম',
+                          labelStyle: TextStyle(color: MyColors.white),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'ব্যক্তি/প্রতিষ্ঠানের নাম দিন';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15,),
                       DropdownButtonFormField<String>(
                         iconDisabledColor: Colors.white,
                         iconEnabledColor: Colors.white,
@@ -157,7 +177,7 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                                                   addressDegreeController.text,
                                               description:
                                                   serviceInfoController.text,
-                                              categoryID: categoryID)
+                                              categoryID: categoryID, name: nameController.text)
                                           .then(
                                         (value) {
                                           if (value['success'] == true) {
@@ -205,6 +225,7 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
   void dispose() {
     addressDegreeController.dispose();
     serviceInfoController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 }

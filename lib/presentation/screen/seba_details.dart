@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/seba_details_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
@@ -103,7 +101,9 @@ class _SebaDetailsState extends State<SebaDetails> {
                         'লক্ষীছড়ি',
                         'মহালছড়ি',
                         'গুইমারা',
-                        'রামগড়'
+                        'রামগড়',
+                        'ঢাকা',
+                        'চট্টগ্রাম'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,

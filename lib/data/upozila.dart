@@ -1,5 +1,4 @@
 final List<String> upozila = [
-  'All',
   'উপজেলা',
   'খাগড়াছড়ি সদর',
   'পানছড়ি',
@@ -9,7 +8,9 @@ final List<String> upozila = [
   'লক্ষীছড়ি',
   'মহালছড়ি',
   'গুইমারা',
-  'রামগড়'
+  'রামগড়',
+  'ঢাকা',
+  'চট্টগ্রাম'
 ];
 final List<String> bloodGroups = [
   'A+',

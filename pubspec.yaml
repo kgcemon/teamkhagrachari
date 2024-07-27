@@ -23,6 +23,8 @@ dependencies:
   intl: any
   flutter_staggered_animations: ^1.1.1
   share_plus: any
+  firebase_core: any
+  firebase_messaging: any
 
 
 dev_dependencies:
