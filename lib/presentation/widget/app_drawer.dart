@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
-import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
 import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/about_us_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
-import 'package:teamkhagrachari/presentation/utils/local_storage.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
-
-import '../controller/user_auth_controller.dart';
 import '../screen/profile/profile_update_screen.dart';
 
 class CustomDrawer extends StatelessWidget {

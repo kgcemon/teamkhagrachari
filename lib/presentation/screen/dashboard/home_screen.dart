@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -13,6 +14,10 @@ import 'package:teamkhagrachari/presentation/widget/home/seba_catagory_card.dart
 import 'package:teamkhagrachari/presentation/widget/lasted_news_widget.dart';
 import 'package:teamkhagrachari/presentation/widget/update_marquee.dart';
 
+import '../../../local_notification_service.dart';
+import '../../../main.dart';
+import '../../../push_notification.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,6 +26,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      LocalNotificationService.initialize(context);
+    });
+    PushNotifications.init();
+    FirebaseMessaging.onBackgroundMessage(firebaseBackgroundMessage);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        LocalNotificationService.display(message);
+      }
+    });
+  }
+
+
   List dedicatedServicesList = [
     {"name": "রক্তদাতা", "image": AssetPath.bloodPNG},
     {"name": "ক্রয়-বিক্রয়", "image": AssetPath.buySellPng},

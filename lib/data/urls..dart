@@ -14,4 +14,5 @@ class ApiUrl {
   static String privacyPolicyLink = "$mainUrl/users/profile/update/";
   static String userServicesUrl = "$mainUrl/services/get-my-services";
   static String scrollTextUrl = "$mainUrl/scroll-text";
+  static String viewCountUrl = "$mainUrl/services/update-view";
 }

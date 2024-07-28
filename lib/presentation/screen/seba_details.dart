@@ -61,8 +61,8 @@ class _SebaDetailsState extends State<SebaDetails> {
                           filled: true,
                           fillColor: Colors.transparent,
                           hintText: "Search",
-                          hintStyle:
-                              const TextStyle(color: Colors.white, fontSize: 13),
+                          hintStyle: const TextStyle(
+                              color: Colors.white, fontSize: 13),
                           suffixIcon: Icon(
                             Icons.search,
                             color: MyColors.white,
@@ -72,24 +72,28 @@ class _SebaDetailsState extends State<SebaDetails> {
                     ),
                   ),
                 ),
-
-                const SizedBox(width: 10,),
-
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.13),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: DropdownButton<String>(
-                      icon: const Icon(Icons.location_on,color: Colors.white,),
+                      icon: const Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
                       value: selectedUpazila,
                       onChanged: (value) {
                         selectedUpazila = value!;
                         print(selectedUpazila);
                         sebaDetailsController.filterDetails(selectedUpazila);
-                          setState(() {});
+                        setState(() {});
                       },
                       items: <String>[
                         'উপজেলা',
@@ -130,8 +134,11 @@ class _SebaDetailsState extends State<SebaDetails> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (sebaDetailsController.filteredDetails.isEmpty) {
                   return const Center(
-                      child: Text('No data available',
-                          style: TextStyle(color: Colors.white)));
+                    child: Text(
+                      'No data available',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
                 } else {
                   return buildSebaCallList(
                       sebaDetailsController.filteredDetails, context);

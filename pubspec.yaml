@@ -23,8 +23,9 @@ dependencies:
   intl: any
   flutter_staggered_animations: ^1.1.1
   share_plus: any
-  firebase_core: any
-  firebase_messaging: any
+  flutter_local_notifications: ^17.2.1+2
+  firebase_core: ^3.2.0
+  firebase_messaging: ^15.0.3
 
 
 dev_dependencies:

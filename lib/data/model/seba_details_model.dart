@@ -56,6 +56,7 @@ class Meta {
 class SebaDetailsDataListModel {
   String? sId;
   String? name;
+  String? view;
   String? description;
   String? addressDegree;
   String? phone;
@@ -71,6 +72,7 @@ class SebaDetailsDataListModel {
   SebaDetailsDataListModel(
       {this.sId,
         this.name,
+        this.view,
         this.addressDegree,
         this.description,
         this.phone,
@@ -86,6 +88,7 @@ class SebaDetailsDataListModel {
   SebaDetailsDataListModel.fromJson(Map json) {
     sId = json['_id'];
     name = json['name'];
+    view = json['totalCount'].toString();
     status = json['status'];
     addressDegree = json['addressDegree'];
     description = json['description'];

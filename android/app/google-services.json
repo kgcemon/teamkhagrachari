@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "22713297135",
-    "project_id": "mindwallet-55680",
-    "storage_bucket": "mindwallet-55680.appspot.com"
+    "project_number": "724534920431",
+    "project_id": "khagrachari-plus",
+    "storage_bucket": "khagrachari-plus.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:22713297135:android:708dbb073d5e408891531a",
-        "android_client_info": {
-          "package_name": "com.mindchain.wallet.mindchain_wallet"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDM8HY_esC6h6B8Ceb2fBxaEWDgh2hX3B0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:22713297135:android:77f0d06ab1e45bcd91531a",
+        "mobilesdk_app_id": "1:724534920431:android:7da74d260f055dba34471a",
         "android_client_info": {
           "package_name": "org.khagrachari.seba.teamkhagrachari"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDM8HY_esC6h6B8Ceb2fBxaEWDgh2hX3B0"
+          "current_key": "AIzaSyCDpRTkojU9I9z3CwL3sd33rTfXmcWCb8g"
         }
       ],
       "services": {

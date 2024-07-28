@@ -10,5 +10,7 @@ class PushNotifications {
         carPlay: true,
         sound: true,
         criticalAlert: true);
+    final token = await firebaseMessaging.getToken();
+    print(token);
   }
 }
