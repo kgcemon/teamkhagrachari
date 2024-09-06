@@ -13,8 +13,6 @@ class ProfileScreenController extends GetxController {
     if(profileData.data == null){
       isLoading = true;
     }
-    update();
-
     NetworkResponse response = await NetworkCaller.getRequest(url: ApiUrl.profileUrl);
 
     if (response.isSuccess) {

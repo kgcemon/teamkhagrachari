@@ -32,7 +32,7 @@ class AboutUsPage extends StatelessWidget {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                     Text(
-                      'Founder & Proprietor',
+                      'Founder',
                       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                   ],

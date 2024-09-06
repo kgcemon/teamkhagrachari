@@ -28,16 +28,16 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            ListTile(
-              tileColor: MyColors.primaryColor,
-              onTap: () => Get.to(() => ProfileUpdateScreen(
-                profileData: Get.find<ProfileScreenController>().profileData,
-              )),
-              title: const Text(
-                "Update Profile",
-              ),
-              leading: const Icon(Icons.person, color: Colors.white),
-            ),
+            // ListTile(
+            //   tileColor: MyColors.primaryColor,
+            //   onTap: () => Get.to(() => ProfileUpdateScreen(
+            //     profileData: Get.find<ProfileScreenController>().profileData,
+            //   )),
+            //   title: const Text(
+            //     "Update Profile",
+            //   ),
+            //   leading: const Icon(Icons.person, color: Colors.white),
+            // ),
             ListTile(
               tileColor: MyColors.primaryColor,
               onTap: () => Get.to(() => const AboutUsPage()),

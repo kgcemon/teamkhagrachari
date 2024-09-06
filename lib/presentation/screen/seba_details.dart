@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/presentation/controller/seba_details_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
@@ -133,15 +134,19 @@ class _SebaDetailsState extends State<SebaDetails> {
                 if (sebaDetailsController.progress.value == true) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (sebaDetailsController.filteredDetails.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'No data available',
-                      style: TextStyle(color: Colors.white),
+                  return  Center(
+                    child: Column(
+                      children: [
+                        Lottie.asset("Assets/images/loading.json"),
+                        const Text(
+                          'No data available',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   );
                 } else {
-                  return buildSebaCallList(
-                      sebaDetailsController.filteredDetails, context);
+                  return SebaCallList(sebaDetailsList:sebaDetailsController.filteredDetails,);
                 }
               }),
             ),

@@ -6,6 +6,7 @@ import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
+import 'dart:math'; // Import the dart:math package
 
 class BloodScreen extends StatefulWidget {
   const BloodScreen({super.key});
@@ -23,7 +24,7 @@ class _BloodScreenState extends State<BloodScreen> {
     super.initState();
     Future.delayed(
       const Duration(seconds: 1),
-      () => loadDialoge(),
+          () => loadDialoge(),
     );
   }
 
@@ -34,7 +35,7 @@ class _BloodScreenState extends State<BloodScreen> {
       title: "রক্তদাতা খুঁজছেন?",
       actions: [
         ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             onPressed: () {
               Get.back();
             },
@@ -162,80 +163,86 @@ class _BloodScreenState extends State<BloodScreen> {
               ),
               const SizedBox(height: 15),
               GetBuilder<BloodScreenController>(
-                builder: (value) => Expanded(
-                  child: Visibility(
-                    visible: value.filteredList.isNotEmpty,
-                    replacement: Lottie.asset(AssetPath.loadingJson),
-                    child: AnimationLimiter(
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final donor = value.filteredList[index];
-                          final lastDonateDate =
-                              DateTime.parse(donor.lastDonateDate ?? '');
-                          final difference =
-                              DateTime.now().difference(lastDonateDate).inDays;
-                          final textColor =
-                              difference >= 120 ? Colors.green : Colors.red;
+                builder: (value) {
+                  // Shuffle the list to make it random
+                  final random = Random();
+                  final shuffledList = value.filteredList.toList()..shuffle(random);
 
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 900),
-                            child: SlideAnimation(
-                              verticalOffset: 50.0,
-                              child: FadeInAnimation(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: textColor),
-                                      color: Colors.white.withOpacity(0.13),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: ListTile(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      tileColor: Colors.transparent,
-                                      onTap: () => _popup(donor, textColor),
-                                      leading: CircleAvatar(
-                                        backgroundColor: textColor,
-                                        child: Text(
-                                          donor.bloodGroup ?? '',
-                                          style:
-                                              TextStyle(color: MyColors.white),
+                  return Expanded(
+                    child: Visibility(
+                      visible: shuffledList.isNotEmpty,
+                      replacement: Lottie.asset(AssetPath.loadingJson),
+                      child: AnimationLimiter(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final donor = shuffledList[index];
+                            final lastDonateDate =
+                            DateTime.parse(donor.lastDonateDate ?? '');
+                            final difference =
+                                DateTime.now().difference(lastDonateDate).inDays;
+                            final textColor =
+                            difference >= 120 ? Colors.green : Colors.red;
+
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 900),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: textColor),
+                                        color: Colors.white.withOpacity(0.13),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ListTile(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(15)),
+                                        tileColor: Colors.transparent,
+                                        onTap: () => _popup(donor, textColor),
+                                        leading: CircleAvatar(
+                                          backgroundColor: textColor,
+                                          child: Text(
+                                            donor.bloodGroup ?? '',
+                                            style:
+                                            TextStyle(color: MyColors.white),
+                                          ),
                                         ),
-                                      ),
-                                      title: Text(
-                                        donor.name ?? '',
-                                        style: TextStyle(color: MyColors.white),
-                                      ),
-                                      subtitle: Text(
-                                        donor.upazila ?? '',
-                                        style: TextStyle(color: MyColors.white),
-                                      ),
-                                      trailing: InkWell(
-                                        onTap: () =>
-                                            uriLaunchUrl('tel:${donor.phone}'),
-                                        child: const Icon(
-                                          Icons.call,
-                                          size: 35,
-                                          color: Colors.green,
+                                        title: Text(
+                                          donor.name ?? '',
+                                          style: TextStyle(color: MyColors.white),
+                                        ),
+                                        subtitle: Text(
+                                          donor.upazila ?? '',
+                                          style: TextStyle(color: MyColors.white),
+                                        ),
+                                        trailing: InkWell(
+                                          onTap: () =>
+                                              uriLaunchUrl('tel:${donor.phone}'),
+                                          child: const Icon(
+                                            Icons.call,
+                                            size: 35,
+                                            color: Colors.green,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                        itemCount: value.filteredList.length,
+                            );
+                          },
+                          itemCount: shuffledList.length,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
@@ -284,8 +291,8 @@ class _BloodScreenState extends State<BloodScreen> {
             backgroundColor: Colors.green,
           ),
           onPressed: () => uriLaunchUrl('tel:${donor.phone ?? ''}'),
-          icon: const Icon(Icons.call,color: Colors.white,),
-          label: const Text("Call",style: TextStyle(color: Colors.white),),
+          icon: const Icon(Icons.call, color: Colors.white,),
+          label: const Text("Call", style: TextStyle(color: Colors.white),),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(

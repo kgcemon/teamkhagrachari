@@ -19,21 +19,12 @@ class UserProfileSebaModel {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
 class Data {
   String? sId;
   String? name;
+  String? view;
   String? description;
   String? phone;
   String? email;
@@ -50,6 +41,7 @@ class Data {
   Data(
       {this.sId,
         this.name,
+        this.view,
         this.description,
         this.phone,
         this.email,
@@ -66,6 +58,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
+    view = json['totalCount'].toString();
     description = json['description'];
     phone = json['phone'];
     email = json['email'];
@@ -73,34 +66,13 @@ class Data {
     serviceProviderName = json['serviceProviderName'];
     location = json['location'];
     servicesCatagory = json['servicesCatagory'] != null
-        ? new ServicesCatagory.fromJson(json['servicesCatagory'])
+        ? ServicesCatagory.fromJson(json['servicesCatagory'])
         : null;
     status = json['status'];
     premium = json['premium'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['phone'] = this.phone;
-    data['email'] = this.email;
-    data['addressDegree'] = this.addressDegree;
-    data['serviceProviderName'] = this.serviceProviderName;
-    data['location'] = this.location;
-    if (this.servicesCatagory != null) {
-      data['servicesCatagory'] = this.servicesCatagory!.toJson();
-    }
-    data['status'] = this.status;
-    data['premium'] = this.premium;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    return data;
   }
 }
 
@@ -133,18 +105,5 @@ class ServicesCatagory {
     updatedAt = json['updatedAt'];
     iV = json['__v'];
     serialNo = json['serialNo'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['img'] = this.img;
-    data['description'] = this.description;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
-    data['serialNo'] = this.serialNo;
-    return data;
   }
 }

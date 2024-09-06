@@ -19,13 +19,13 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
   TextEditingController addressDegreeController = TextEditingController();
   TextEditingController serviceInfoController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   String categoryID = '';
-  String upazila = '';
   List<String> categoryList = [];
   List<CategoryModel> list = Get.find<HomeScreenController>().category;
 
   final AddUserServiceController _controller =
-      Get.find<AddUserServiceController>();
+  Get.find<AddUserServiceController>();
 
   @override
   void initState() {
@@ -61,26 +61,9 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: nameController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.13),
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'ব্যক্তি/প্রতিষ্ঠানের নাম দিন';
-                          }
-                          return null;
-                        },
+                      const SizedBox(
+                        height: 15,
                       ),
-                      const SizedBox(height: 15,),
                       DropdownButtonFormField<String>(
                         iconDisabledColor: Colors.white,
                         iconEnabledColor: Colors.white,
@@ -103,13 +86,32 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                         onChanged: (newValue) {
                           setState(() {
                             var matchingElement = list.firstWhere(
-                                (element) => element.name == newValue);
+                                    (element) => element.name == newValue);
                             categoryID = matchingElement.id;
                           });
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please select your category';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: nameController,
+                        style: TextStyle(color: MyColors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.13),
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম',
+                          labelStyle: TextStyle(color: MyColors.white),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 3) {
+                            return 'ব্যক্তি/প্রতিষ্ঠানের কমপক্ষে 3 অক্ষরের হতে হবে';
                           }
                           return null;
                         },
@@ -127,8 +129,28 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         validator: (value) {
+                          if (value!.isEmpty || value.length < 3) {
+                            return 'ঠিকানা/ডিগ্রি কমপক্ষে ৩ অক্ষরের হতে হবে';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(color: MyColors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.13),
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: 'ফোন নাম্বার',
+                          labelStyle: TextStyle(color: MyColors.white),
+                        ),
+                        validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your phone number';
+                            return 'ফোন নাম্বার দিন';
                           }
                           return null;
                         },
@@ -147,8 +169,8 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your service description';
+                          if (value!.isEmpty || value.length < 5) {
+                            return 'সেবার বিবরণ কমপক্ষে ৫ অক্ষরের হতে হবে';
                           }
                           return null;
                         },
@@ -157,52 +179,55 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                       GetBuilder<AddUserServiceController>(
                         builder: (controller) => controller.isProgress == false
                             ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 80.0),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.white.withOpacity(0.65),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                  ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      _controller
-                                          .addUserServices(
-                                              addressDegree:
-                                                  addressDegreeController.text,
-                                              description:
-                                                  serviceInfoController.text,
-                                              categoryID: categoryID, name: nameController.text)
-                                          .then(
-                                        (value) {
-                                          if (value['success'] == true) {
-                                            Get.snackbar(
-                                                backgroundColor: Colors.green,
-                                                colorText: Colors.white,
-                                                "ধন্যবাদ",
-                                                "আপনার সেবাটি পেন্ডিং রয়েছে। অ্যাপ্রুভের জন্যে অপেক্ষা করুন");
-                                            Get.offAll(() =>
-                                                const MainNavScreen(
-                                                    title: "Khagrachari Plus"));
-                                          } else {
-                                            Get.snackbar(
-                                                "Error", value['message']);
-                                          }
-                                        },
-                                      );
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 80.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _controller
+                                    .addUserServices(
+                                    addressDegree:
+                                    addressDegreeController.text,
+                                    description:
+                                    serviceInfoController.text,
+                                    categoryID: categoryID,
+                                    name: nameController.text,
+                                    phone: phoneController.text)
+                                    .then(
+                                      (value) {
+                                    if (value['success'] == true) {
+                                      Get.snackbar(
+                                          backgroundColor: Colors.green,
+                                          colorText: Colors.white,
+                                          "ধন্যবাদ",
+                                          "আপনার সেবাটি পেন্ডিং রয়েছে। অ্যাপ্রুভের জন্যে অপেক্ষা করুন");
+                                      Get.offAll(() =>
+                                      const MainNavScreen(
+                                          title: "Khagrachari Plus"));
+                                    } else {
+                                      Get.snackbar(
+                                          "Error",
+                                          value['errorMessages'] ??
+                                              value['message']);
                                     }
                                   },
-                                  child: const Text(
-                                    'সেবা যুক্ত করুন',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              )
+                                );
+                              }
+                            },
+                            child: const Text(
+                              'সেবা যুক্ত করুন',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
                             : const Center(child: CircularProgressIndicator()),
                       ),
                     ],
@@ -217,15 +242,16 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
   }
 
   OutlineInputBorder inputStyle() => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      );
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide.none,
+  );
 
   @override
   void dispose() {
     addressDegreeController.dispose();
     serviceInfoController.dispose();
     nameController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 }

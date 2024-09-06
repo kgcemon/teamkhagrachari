@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
-import 'package:teamkhagrachari/presentation/screen/auth/register_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/home_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dart';
 import 'package:teamkhagrachari/presentation/widget/app_drawer.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
-
 import '../controller/home_screen_controller.dart';
 
 class MainNavScreen extends StatefulWidget {
@@ -35,7 +33,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppbar(name: widget.title),
+      appBar: myAppbar(name: ''),
       drawer: const CustomDrawer(),
       bottomNavigationBar: GetBuilder<NavButtonControllerController>(
         builder: (navBtnController) => BottomNavigationBar(

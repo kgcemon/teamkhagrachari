@@ -5,27 +5,33 @@ import '../../data/urls..dart';
 
 class AddUserServiceController extends GetxController {
   bool isProgress = false;
+
   Future<Map<String, dynamic>> addUserServices({
     required String addressDegree,
     required String description,
     required String categoryID,
     required String name,
+    required String phone,
   }) async {
     isProgress = true;
     update();
+
     NetworkResponse response = await NetworkCaller.postRequest(
       body: {
         "serviceProviderName": name,
         "description": description,
         "servicesCatagory": categoryID,
         "addressDegree": addressDegree,
+        "phone": phone,
       },
       url: ApiUrl.addUserServicesUrl,
     );
+
     isProgress = false;
     update();
+
     if (response.isSuccess) {
-      if (response.responseData['success'] == true) {
+      if (response.responseData != null && response.responseData['success'] == true) {
         return {
           'success': true,
           'message': response.responseData['message'],
@@ -34,10 +40,21 @@ class AddUserServiceController extends GetxController {
       } else {
         return {
           'success': false,
-          'message': response.responseData['message'],
-          'errorMessages': response.responseData['errorMessages'],
+          'message': response.responseData?['message'] ?? 'Unknown error',
+          'errorMessages': response.responseData?['errorMessages'] ?? [],
         };
       }
+    } else if (response.responseCode == 400) {
+      // Capture and return the validation error message
+      String errorMessage = response.responseData?['errorMessages'] != null
+          ? response.responseData!['errorMessages'][0]['message']
+          : 'Validation error';
+
+      return {
+        'success': false,
+        'message': errorMessage,
+        'errorMessages': response.responseData?['errorMessages'] ?? [],
+      };
     } else {
       return {
         'success': false,

@@ -1,56 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/data/model/seba_details_model.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import '../../data/urls..dart';
 import '../utils/uri_luncher.dart';
 
-Widget buildSebaCallList(
-    List<SebaDetailsDataListModel> sebaDetailsList, BuildContext context) {
-  if (sebaDetailsList.isEmpty) {
-    return const Center(child: CircularProgressIndicator());
-  }
+class SebaCallList extends StatefulWidget {
+  final List<SebaDetailsDataListModel> sebaDetailsList;
 
-  return AnimationLimiter(
-    child: ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: sebaDetailsList.length,
-      itemBuilder: (context, index) => AnimationConfiguration.staggeredList(
-        position: index,
-        duration: const Duration(milliseconds: 900),
-        child: InkWell(
-            onTap: () async {
-              var res = await NetworkCaller.patchRequest(
-                  url:
-                  "${ApiUrl.viewCountUrl}/${sebaDetailsList[index].sId}");
-              print(res.responseData);
-            },
+  const SebaCallList({super.key, required this.sebaDetailsList});
+
+  @override
+  SebaCallListState createState() => SebaCallListState();
+}
+
+class SebaCallListState extends State<SebaCallList> {
+  Set<String> expandedIds = {};
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.sebaDetailsList.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    
+    List<SebaDetailsDataListModel> sortedList = widget.sebaDetailsList
+        .toList()
+      ..sort((a, b) {
+        int viewA = int.tryParse(a.view ?? '0') ?? 0;
+        int viewB = int.tryParse(b.view ?? '0') ?? 0;
+        return viewB.compareTo(viewA);
+      });
+
+    return AnimationLimiter(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: sortedList.length,
+        itemBuilder: (context, index) => AnimationConfiguration.staggeredList(
+          position: index,
+          duration: const Duration(milliseconds: 900),
           child: SlideAnimation(
             verticalOffset: 50.0,
             child: FadeInAnimation(
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.13),
+                  border: Border.all(width: 3 ,color: index == 0 ? Colors.blue : Colors.transparent),
+                  color: index == 0 ? Colors.yellow.shade200 :  Colors.white.withOpacity(0.13),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpansionTile(
+                  onExpansionChanged: (value) {
+                    if (value && !expandedIds.contains(sortedList[index].sId.toString())) {
+                      expandedIds.add(sortedList[index].sId.toString());
+                      _countAdd(sortedList[index].sId.toString());
+                    }
+                  },
                   backgroundColor: Colors.white.withOpacity(0.13),
                   title: RichText(
                     text: TextSpan(
-                      // children: [
-                      //   TextSpan(
-                      //     text: " ${sebaDetailsList[index].location}",
-                      //     style:
-                      //         const TextStyle(fontSize: 10, color: Colors.green),
-                      //   )
-                      // ],
-                      text:
-                          sebaDetailsList[index].serviceProviderName ?? 'No name',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      text: sortedList[index].serviceProviderName ?? 'No name',
+                      style:  TextStyle(
+                        color: index == 0 ? Colors.black : Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -59,31 +73,31 @@ Widget buildSebaCallList(
                   subtitle: Wrap(
                     children: [
                       Text(
-                        sebaDetailsList[index].addressDegree ?? '',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        sortedList[index].addressDegree ?? '',
+                        style: TextStyle(
+                          color: index == 0 ? Colors.black :  Colors.white,
                           fontStyle: FontStyle.italic,
                           fontSize: 12,
                         ),
                       ),
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.remove_red_eye,
-                            color: Colors.green,
+                            color: index == 0 ? Colors.green :  Colors.white.withOpacity(0.5),
                             size: 16,
                           ),
                           const SizedBox(
                             width: 5,
                           ),
                           Text(
-                            " ${sebaDetailsList[index].view}",
-                            style: const TextStyle(
-                                color: Colors.green, fontSize: 11),
+                            "${sortedList[index].view}",
+                            style: TextStyle(
+                                color: index == 0 ? Colors.green : Colors.white.withOpacity(0.5), fontSize: 11),
                           ),
                           Text(
-                            "   ${sebaDetailsList[index].location}",
-                            style: const TextStyle(color: Colors.green),
+                            "   ${sortedList[index].location}",
+                            style: const TextStyle(color: Colors.green, fontSize: 12),
                           ),
                         ],
                       ),
@@ -106,7 +120,7 @@ Widget buildSebaCallList(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green),
                           onPressed: () {
-                            uriLaunchUrl('tel:${sebaDetailsList[index].phone}');
+                            uriLaunchUrl('tel:${sortedList[index].phone}');
                           },
                           child: const Text(
                             "কল করুন",
@@ -116,19 +130,16 @@ Widget buildSebaCallList(
                         ),
                       );
                     },
-                    child: const Icon(
-                      Icons.call,
-                      size: 35,
-                      color: Colors.green,
-                    ),
+                    child: Lottie.asset("Assets/images/call.json"),
                   ),
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       alignment: Alignment.topLeft,
-                      child: Text(
-                        sebaDetailsList[index].description ?? 'No description',
-                        style: const TextStyle(color: Colors.white),
+                      child: HtmlWidget(
+                        textStyle: TextStyle(color:  index == 0 ? Colors.black : Colors.white),
+                        sortedList[index].description ?? 'No description',
+                        // style:  TextStyle(color: index == 0 ? Colors.black : Colors.white),
                       ),
                     ),
                   ],
@@ -138,6 +149,10 @@ Widget buildSebaCallList(
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  void _countAdd(String id) async {
+    await NetworkCaller.patchRequest(url: "${ApiUrl.viewCountUrl}/$id");
+  }
 }

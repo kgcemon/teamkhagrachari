@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 
 class LocalNotificationService {
@@ -8,9 +9,9 @@ class LocalNotificationService {
       FlutterLocalNotificationsPlugin();
 
   static void initialize(BuildContext context) {
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+     InitializationSettings initializationSettings =
+        const InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
     );
 
     _notificationsPlugin.initialize(
@@ -31,6 +32,7 @@ class LocalNotificationService {
           'channel_name',
           importance: Importance.max,
           priority: Priority.high,
+          icon: "@mipmap/ic_launcher"
         ),
       );
 
