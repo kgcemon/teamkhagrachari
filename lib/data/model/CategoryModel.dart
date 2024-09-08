@@ -6,6 +6,7 @@ class CategoryModel {
   String id;
   String name;
   String? img;
+  int? serialNo;
   String description;
   DateTime createdAt;
   DateTime updatedAt;
@@ -16,6 +17,7 @@ class CategoryModel {
     required this.name,
     this.img,
     required this.description,
+    required this.serialNo,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -25,6 +27,7 @@ class CategoryModel {
     id: json["_id"],
     name: json["name"],
     img: json["img"],
+    serialNo: json["serialNo"],
     description: json["description"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),

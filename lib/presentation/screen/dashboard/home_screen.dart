@@ -13,7 +13,6 @@ import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/widget/home/seba_catagory_card.dart';
 import 'package:teamkhagrachari/presentation/widget/lasted_news_widget.dart';
 import 'package:teamkhagrachari/presentation/widget/update_marquee.dart';
-
 import '../../../local_notification_service.dart';
 import '../../../main.dart';
 import '../../../push_notification.dart';
@@ -26,6 +25,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
+  String importantServiceQuery = '';
 
   @override
   void initState() {
@@ -42,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
-
 
   List dedicatedServicesList = [
     {"name": "রক্তদাতা", "image": AssetPath.bloodPNG},
@@ -64,40 +65,75 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const UpdateNewsMarquee(),
               ImageSliderWidget(sliderImagesList: controller.sliderImageList),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   "Latest News",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               const LastedNewsWidget(),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: Text(
                   "Dedicated Services",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: _dedicatedServices(),
               ),
-              const SizedBox(
-                height: 10,
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white.withOpacity(0.13),
+                  ),
+                  child: TextField(
+                    cursorColor: Colors.white,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      hintText: "Search Important Services",
+                      hintStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                      ),
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: MyColors.white,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        importantServiceQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
+                ),
               ),
               SebaCatagoryCard(
-                sebaList: controller.category,
+                sebaList: controller.category.where((item) {
+                  final name = item.name.toString().toLowerCase();
+                  return name.contains(importantServiceQuery);
+                }).toList(),
                 sebaName: 'Important Services',
               ),
             ],
@@ -108,28 +144,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _dedicatedServices() {
+    // Filter services based on the search query
+    List filteredServices = dedicatedServicesList
+        .where((service) =>
+        service["name"].toString().toLowerCase().contains(searchQuery))
+        .toList();
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        for (int i = 0; i < dedicatedServicesList.length; i++)
+        for (int i = 0; i < filteredServices.length; i++)
           GestureDetector(
-              onTap: () {
-                if (i == 0) {
-                  Get.to(() => const BloodScreen());
-                } else {
-                  Get.defaultDialog(
-                      backgroundColor: Colors.white,
-                      title: dedicatedServicesList[i]['name'],
-                      content: Lottie.asset("Assets/images/coming.json"));
-                }
-              },
-              child: _dedicatedServicesCard(i)),
+            onTap: () {
+              if (i == 0) {
+                Get.to(() => const BloodScreen());
+              } else {
+                Get.defaultDialog(
+                  backgroundColor: Colors.white,
+                  title: filteredServices[i]['name'],
+                  content: Lottie.asset("Assets/images/coming.json"),
+                );
+              }
+            },
+            child: _dedicatedServicesCard(filteredServices, i),
+          ),
       ],
     );
   }
 
-  Widget _dedicatedServicesCard(int i) {
+  Widget _dedicatedServicesCard(List services, int i) {
     return AnimationLimiter(
       child: AnimationConfiguration.staggeredList(
         position: i,
@@ -153,19 +197,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      dedicatedServicesList[i]['image'],
+                      services[i]['image'],
                       height: 30,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return const Icon(Icons.error, size: 30);
                       },
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
+                    const SizedBox(height: 5),
                     Text(
-                      dedicatedServicesList[i]['name'],
-                      style: const TextStyle(fontSize: 12, color: Colors.white,fontFamily: "banglafont"),
+                      services[i]['name'],
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontFamily: "banglafont",
+                      ),
                     ),
                   ],
                 ),
@@ -195,28 +241,30 @@ class ImageSliderWidget extends StatelessWidget {
               ? const Center(child: CircularProgressIndicator())
               : Carousel(
             dotSize: 5,
-                  dotSpacing: 15,
-                  dotPosition: DotPosition.values[DotPosition.bottomCenter.index],
-                  boxFit: BoxFit.cover,
-                  dotBgColor: Colors.transparent,
-                  dotColor: Colors.white,
-                dotVerticalPadding: -15,
-                  images: sliderImagesList
-                      .map(
-                        (url) => ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: url,
-                            placeholder: (context, url) =>
-                                const CupertinoActivityIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      )
-                      .toList(),
+            dotSpacing: 15,
+            dotPosition:
+            DotPosition.values[DotPosition.bottomCenter.index],
+            boxFit: BoxFit.cover,
+            dotBgColor: Colors.transparent,
+            dotColor: Colors.white,
+            dotVerticalPadding: -15,
+            images: sliderImagesList
+                .map(
+                  (url) => ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  errorWidget: (context, url, error) =>
+                  const Icon(Icons.error),
                 ),
+              ),
+            )
+                .toList(),
+          ),
         ),
       ),
     );

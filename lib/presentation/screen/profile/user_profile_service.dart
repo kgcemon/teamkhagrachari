@@ -3,9 +3,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../../controller/user_profile__seba_controller.dart';
-import 'package:http/http.dart' as http;
 
 class UserProfileServiceScreen extends StatefulWidget {
   const UserProfileServiceScreen({super.key});
@@ -37,10 +35,14 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
         final data = userProfileSebaController.filteredDetails.value.data!;
 
         if (data.isEmpty) {
-          return const Center(child: Text('No data available.',style: TextStyle(color: Colors.white),));
+          return const Center(
+              child: Text('No data available.',
+                  style: TextStyle(color: Colors.white)));
         }
 
-        final totalViews = data.map((item) => int.tryParse(item.view ?? '0') ?? 0).reduce((a, b) => a + b);
+        final totalViews = data
+            .map((item) => int.tryParse(item.view ?? '0') ?? 0)
+            .reduce((a, b) => a + b);
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -83,81 +85,6 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                   ),
                 ),
                 const Divider(),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.13),
-                  ),
-                  height: data.length >= 2 ? 180 : 0,
-                  child: data.isNotEmpty
-                      ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: data.length >= 2
-                        ? LineChart(
-                      LineChartData(
-                        borderData: FlBorderData(show: false),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: data.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              var item = entry.value;
-                              return FlSpot(
-                                index.toDouble(),
-                                double.tryParse(item.view ?? '0') ??
-                                    0,
-                              );
-                            }).toList(),
-                            isCurved: true,
-                            colors: [Colors.white],
-                            barWidth: 4,
-                            belowBarData: BarAreaData(show: false),
-                            dotData: FlDotData(
-                              show: true,
-                              getDotPainter: (spot, percent, bar, index) {
-                                return FlDotCirclePainter(
-                                  radius: 3,
-                                  color: Colors.white,
-                                  strokeWidth: 0,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                        titlesData: FlTitlesData(
-                          topTitles: SideTitles(
-                            showTitles: false,
-                            getTextStyles: (context, value) {
-                              return const TextStyle(
-                                  color: Colors.white);
-                            },
-                          ),
-                          rightTitles: SideTitles(
-                            showTitles: true,
-                            getTextStyles: (context, value) {
-                              return const TextStyle(
-                                  color: Colors.white);
-                            },
-                          ),
-                          bottomTitles: SideTitles(
-                            showTitles: true,
-                            getTextStyles: (context, value) {
-                              return const TextStyle(
-                                  color: Colors.white);
-                            },
-                          ),
-                          leftTitles: SideTitles(
-                            showTitles: true,
-                            getTextStyles: (context, value) {
-                              return const TextStyle(
-                                  color: Colors.white);
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                        : const SizedBox(),
-                  )
-                      : const CircularProgressIndicator(),
-                ),
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
@@ -227,7 +154,8 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                                       alignment: Alignment.topLeft,
                                       child: Text(
                                         data[index].description ?? 'No description',
-                                        style: const TextStyle(color: Colors.white),
+                                        style:
+                                        const TextStyle(color: Colors.white),
                                       ),
                                     ),
                                     Padding(
@@ -258,13 +186,13 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                                                           userProfileSebaController
                                                               .getLoadUserSeba();
                                                         },
-                                                        child:
-                                                        const Text("Delete"),
+                                                        child: const Text("Delete"),
                                                       ),
                                                       ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          backgroundColor: Colors.white
+                                                          backgroundColor: Colors
+                                                              .white
                                                               .withOpacity(0.13),
                                                         ),
                                                         onPressed: () =>
@@ -279,7 +207,8 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                                               ),
                                               label: const Text(
                                                 "Delete",
-                                                style: TextStyle(color: Colors.white),
+                                                style:
+                                                TextStyle(color: Colors.white),
                                               ),
                                             ),
                                           ),
