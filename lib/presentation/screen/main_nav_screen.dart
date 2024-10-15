@@ -21,7 +21,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
   final List<Widget> _screens = <Widget>[
     const HomeScreen(),
     const BloodScreen(),
-     const ProfileScreen()
+      ProfileScreen()
   ];
 
   @override

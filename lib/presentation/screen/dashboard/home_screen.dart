@@ -6,6 +6,9 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:lecle_flutter_carousel_pro/lecle_flutter_carousel_pro.dart';
 import 'package:lottie/lottie.dart';
+import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
+import 'package:teamkhagrachari/data/urls..dart';
+import 'package:teamkhagrachari/presentation/screen/buy_sell_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/home_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
@@ -17,6 +20,7 @@ import '../../../local_notification_service.dart';
 import '../../../main.dart';
 import '../../../push_notification.dart';
 
+int popupCount = 0;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -29,9 +33,44 @@ class _HomeScreenState extends State<HomeScreen> {
   String searchQuery = '';
   String importantServiceQuery = '';
 
+  loadPopUp() async {
+    if(popupCount == 0){
+      var response = await NetworkCaller.getRequest(url: ApiUrl.popUpUrls);
+      if (response.responseCode == 200 &&
+          response.responseData['success'] == true) {
+        popupCount = 1;
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            backgroundColor: Colors.transparent,
+            //title: Text(""),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    const Spacer(),
+                    IconButton(
+                      color: Colors.red,
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () => Get.back(),
+                    )
+                  ],
+                ),
+                Image.network(response.responseData['data'][0]['notice']),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    loadPopUp();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LocalNotificationService.initialize(context);
     });
@@ -49,8 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {"name": "রক্তদাতা", "image": AssetPath.bloodPNG},
     {"name": "ক্রয়-বিক্রয়", "image": AssetPath.buySellPng},
     {"name": "শাদী মোবারক", "image": AssetPath.weddingPng},
-    {"name": "বই বিনিময়", "image": AssetPath.weddingPng},
-    {"name": "চাকরি", "image": AssetPath.weddingPng},
+    {"name": "ডাক্তারের সাক্ষাৎ", "image": AssetPath.weddingPng},
   ];
 
   @override
@@ -96,7 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 7.0, vertical: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -147,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Filter services based on the search query
     List filteredServices = dedicatedServicesList
         .where((service) =>
-        service["name"].toString().toLowerCase().contains(searchQuery))
+            service["name"].toString().toLowerCase().contains(searchQuery))
         .toList();
 
     return Row(
@@ -159,6 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               if (i == 0) {
                 Get.to(() => const BloodScreen());
+              } else if (i == 1) {
+                Get.to(() => const BuySellScreen());
               } else {
                 Get.defaultDialog(
                   backgroundColor: Colors.white,
@@ -205,12 +246,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                      services[i]['name'],
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontFamily: "banglafont",
+                    FittedBox(
+                      child: Text(
+                        services[i]['name'],
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontFamily: "banglafont",
+                        ),
                       ),
                     ),
                   ],
@@ -240,31 +283,31 @@ class ImageSliderWidget extends StatelessWidget {
           child: sliderImagesList.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : Carousel(
-            dotSize: 5,
-            dotSpacing: 15,
-            dotPosition:
-            DotPosition.values[DotPosition.bottomCenter.index],
-            boxFit: BoxFit.cover,
-            dotBgColor: Colors.transparent,
-            dotColor: Colors.white,
-            dotVerticalPadding: -15,
-            images: sliderImagesList
-                .map(
-                  (url) => ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: url,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: CupertinoActivityIndicator(),
-                  ),
-                  errorWidget: (context, url, error) =>
-                  const Icon(Icons.error),
+                  dotSize: 5,
+                  dotSpacing: 15,
+                  dotPosition:
+                      DotPosition.values[DotPosition.bottomCenter.index],
+                  boxFit: BoxFit.cover,
+                  dotBgColor: Colors.transparent,
+                  dotColor: Colors.white,
+                  dotVerticalPadding: -15,
+                  images: sliderImagesList
+                      .map(
+                        (url) => ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CachedNetworkImage(
+                            imageUrl: url,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CupertinoActivityIndicator(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
-              ),
-            )
-                .toList(),
-          ),
         ),
       ),
     );

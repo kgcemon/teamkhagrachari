@@ -6,10 +6,8 @@ import 'package:teamkhagrachari/presentation/add_user_service_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/profile/profile_update_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/profile/user_profile_service.dart';
-import 'package:teamkhagrachari/presentation/utils/color.dart';
-import '../../controller/user_auth_controller.dart';
-import '../../widget/url_luncher.dart';
-import '../auth/login_screen.dart';
+
+import '../../utils/color.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -67,7 +65,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 60,
                                   ),
                                 )),
-                            const AppbarPopUpMenuWidget()
+                            GestureDetector(
+                              onTap: () => Get.to(() => ProfileUpdateScreen(
+                                profileData: Get.find<ProfileScreenController>().profileData,
+                              )),
+                              child: Container(
+                                padding:  const EdgeInsets.all(5),
+                                decoration:  BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                    color: MyColors.secenderyColor),
+                                child: const Text("Edit Profile",
+                                  style: TextStyle(color: Colors.white),),
+                              ),
+                            ),
                           ],
                         ),
                         Text(
@@ -118,8 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.orange),
-                                  onPressed: () => Get.to(
-                                      () => const AddUserServiceScreen()),
+                                  onPressed: () =>
+                                      Get.to(
+                                              () => const AddUserServiceScreen()),
                                   child: const Text(
                                     "সেবা যুক্ত করুন",
                                     style: TextStyle(color: Colors.white),
@@ -149,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 10,
                   ),
                   InkWell(
-                    onTap: () => Get.to(()=> const UserProfileServiceScreen()),
+                    onTap: () => Get.to(() => const UserProfileServiceScreen()),
                     child: const ProfileItem(
                         label: 'আপনার সেবা সমুহ',
                         value: "আপনার সকল সেবা সেখতে ক্লিক করুন",
@@ -172,12 +183,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     value: "${BanglaConvertor.convertPrice(
                       DateFormat('dd/MM/yyyy').format(
                         DateTime.parse(controller
-                                .profileData.data!.lastDonateDate
-                                .toString())
+                            .profileData.data!.lastDonateDate
+                            .toString())
                             .toLocal()
                             .add(const Duration(days: 120)),
                       ),
-                    )} (${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString()).contains("-") ? "আপনি এখন রক্ত দিতে পারবেন" : "${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString())}দিন বাকি"})",
+                    )} (${BanglaConvertor.convertPrice((DateTime
+                        .parse(
+                        controller.profileData.data!.lastDonateDate.toString())
+                        .add(const Duration(days: 120))
+                        .difference(DateTime.now())
+                        .inDays).toString()).contains("-")
+                        ? "আপনি এখন রক্ত দিতে পারবেন"
+                        : "${BanglaConvertor.convertPrice((DateTime
+                        .parse(
+                        controller.profileData.data!.lastDonateDate.toString())
+                        .add(const Duration(days: 120))
+                        .difference(DateTime.now())
+                        .inDays).toString())}দিন বাকি"})",
                     iconData: Icons.date_range,
                   ),
                 ],
@@ -195,11 +218,10 @@ class ProfileItem extends StatelessWidget {
   final String value;
   final IconData iconData;
 
-  const ProfileItem(
-      {super.key,
-      required this.label,
-      required this.value,
-      required this.iconData});
+  const ProfileItem({super.key,
+    required this.label,
+    required this.value,
+    required this.iconData});
 
   @override
   Widget build(BuildContext context) {
@@ -217,65 +239,6 @@ class ProfileItem extends StatelessWidget {
           style: const TextStyle(fontSize: 11),
         ),
       ),
-    );
-  }
-}
-
-class AppbarPopUpMenuWidget extends StatelessWidget {
-  const AppbarPopUpMenuWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      color: MyColors.primaryColor,
-      shadowColor: Colors.transparent,
-      icon: const Icon(
-        Icons.more_vert,
-        color: Colors.white,
-      ),
-      itemBuilder: (context) {
-        return [
-          PopupMenuItem(
-            onTap: () => Get.to(() => ProfileUpdateScreen(
-                  profileData: Get.find<ProfileScreenController>().profileData,
-                )),
-            value: "Profile Edit",
-            child: const Row(
-              children: [
-                Icon(Icons.edit, color: Colors.white),
-                Text(
-                  " Profile Edit",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          const PopupMenuItem(
-            value: "Log Out",
-            child: Row(
-              children: [
-                Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
-                Text(
-                  " Log Out",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ];
-      },
-      onSelected: (value) {
-         if (value.contains("Log Out")) {
-          UserAuthController.clearUserData();
-          Get.offAll(() => const LoginScreen());
-        } else if (value.contains("Remove Account")) {
-        }
-      },
     );
   }
 }

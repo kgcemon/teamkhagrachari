@@ -62,7 +62,7 @@ class SebaCatagoryCard extends StatelessWidget  {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                crossAxisCount: _getCrossAxisCount(context),
+                crossAxisCount: getCrossAxisCount(context),
                 mainAxisExtent: 75),
             itemBuilder: (context, index) => GestureDetector(
               onTap: () => Navigator.push(
@@ -118,7 +118,7 @@ class SebaCatagoryCard extends StatelessWidget  {
     );
   }
 
-  int _getCrossAxisCount(BuildContext context) {
+  int getCrossAxisCount(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = (screenWidth / 120).floor();
     return crossAxisCount > 3 ? 3 : crossAxisCount;

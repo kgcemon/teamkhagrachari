@@ -15,4 +15,6 @@ class ApiUrl {
   static String userServicesUrl = "$mainUrl/services/get-my-services";
   static String scrollTextUrl = "$mainUrl/scroll-text";
   static String viewCountUrl = "$mainUrl/services/update-view";
+  static String buySellCategoryUrl  = "$mainUrl/product-categorys";
+  static String popUpUrls  = "$mainUrl/notice/allnotice";
 }

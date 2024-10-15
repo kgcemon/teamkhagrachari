@@ -106,7 +106,7 @@ class AddUserServiceScreenState extends State<AddUserServiceScreen> {
                           fillColor: Colors.white.withOpacity(0.13),
                           focusedBorder: inputStyle(),
                           enabledBorder: inputStyle(),
-                          labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম',
+                          labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম/টাইটেল',
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         validator: (value) {
