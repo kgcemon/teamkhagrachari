@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+var notificationToken = '';
 class PushNotifications {
   static final firebaseMessaging = FirebaseMessaging.instance;
 
@@ -11,6 +12,6 @@ class PushNotifications {
         sound: true,
         criticalAlert: true);
     final token = await firebaseMessaging.getToken();
-    print(token);
+    notificationToken = token.toString();
   }
 }

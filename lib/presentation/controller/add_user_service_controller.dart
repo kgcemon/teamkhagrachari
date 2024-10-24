@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/data/model/network_response.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
+import 'package:teamkhagrachari/presentation/utils/local_storage.dart';
+import 'package:teamkhagrachari/push_notification.dart';
 import '../../data/urls..dart';
 
 class AddUserServiceController extends GetxController {
@@ -23,6 +25,7 @@ class AddUserServiceController extends GetxController {
         "servicesCatagory": categoryID,
         "addressDegree": addressDegree,
         "phone": phone,
+        "token": notificationToken
       },
       url: ApiUrl.addUserServicesUrl,
     );

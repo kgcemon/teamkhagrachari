@@ -53,7 +53,7 @@ class BuySellScreen extends StatelessWidget {
                     child: FlipAnimation(
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(()=>const ProductViewScreen());
+                          Get.to(()=> ProductViewScreen(categoryId: controller.categoryList[index].id,title: controller.categoryList[index].name,));
                         },
                         child: Container(
                           alignment: Alignment.center,
