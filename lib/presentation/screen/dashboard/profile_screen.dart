@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:teamkhagrachari/bangla_convertor.dart';
 import 'package:teamkhagrachari/presentation/add_user_service_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/screen/add_product_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/profile/profile_update_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/profile/user_profile_service.dart';
 
@@ -144,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green),
                                   onPressed: () {
-                                    Get.snackbar("Coming..", "coming soon");
+                                    Get.to(()=> const AddProductScreen());
                                   },
                                   child: const Text(
                                     "পণ্য বিক্রি করুন",

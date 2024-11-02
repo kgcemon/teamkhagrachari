@@ -8,6 +8,7 @@ import 'package:lecle_flutter_carousel_pro/lecle_flutter_carousel_pro.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import 'package:teamkhagrachari/data/urls..dart';
+import 'package:teamkhagrachari/presentation/add_user_service_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/buy_sell_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/home_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
@@ -39,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.responseCode == 200 &&
           response.responseData['success'] == true) {
         popupCount = 1;
-        return showDialog(
+        bool show = response.responseData['data'][0]['notice'].toString() != 'no';
+        return  show ? showDialog(
           context: context,
           builder: (context) => AlertDialog(
             contentPadding: const EdgeInsets.all(0),
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        );
+        ) : null;
       }
     }
   }
@@ -94,6 +96,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(()=>const AddUserServiceScreen());
+        },
+        label: const Text(
+          "সেবা যোগ করুন",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        icon: const Icon(Icons.add, size: 20),
+        backgroundColor: Colors.teal, // You can change this to any color you like
+        splashColor: Colors.tealAccent, // The splash effect color when tapped
+      ),
       backgroundColor: MyColors.primaryColor,
       body: GetBuilder<HomeScreenController>(
         builder: (controller) => SingleChildScrollView(

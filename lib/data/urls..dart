@@ -17,5 +17,6 @@ class ApiUrl {
   static String viewCountUrl = "$mainUrl/services/update-view";
   static String buySellCategoryUrl  = "$mainUrl/product-categorys";
   static String popUpUrls  = "$mainUrl/notice/allnotice";
-  static String productsUrls(String catId)=> "$mainUrl/products?page=1&limit=55&categoryId=$catId";
+  static String addProductUrl  = "$mainUrl/products";
+  static String productsUrls(String catId)=> "$mainUrl/products?page=1&limit=55&categoryId=$catId&status=Approved";
 }

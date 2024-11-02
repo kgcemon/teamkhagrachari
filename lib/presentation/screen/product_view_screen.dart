@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:teamkhagrachari/bangla_convertor.dart';
 import '../controller/ProductDetailsController.dart';
 import 'ProductDetailsScreen.dart';
 
@@ -15,6 +16,7 @@ class ProductViewScreen extends StatefulWidget {
 }
 
 class ProductViewScreenState extends State<ProductViewScreen> {
+
   String selectedSubcategory = 'All';
   String selectedLocation = 'All';
   String searchQuery = '';
@@ -51,9 +53,11 @@ class ProductViewScreenState extends State<ProductViewScreen> {
       backgroundColor: const Color(0xFF2C2D41),
       appBar: AppBar(
         // App bar with title "Product Catalog" and background color matching theme
-        title:  Text(
-            widget.title,
-          style: const TextStyle(color: Colors.white),
+        title: Obx(
+          () => Text(
+            "${widget.title}(${BanglaConvertor.convertPrice(_productDetailsController.totalItemCount.value)} টি)",
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
         backgroundColor: Colors.indigo,
       ),
@@ -228,21 +232,13 @@ class ProductViewScreenState extends State<ProductViewScreen> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: InkWell(
-                              onTap: () => Get.to(() => ProductDetailsScreen(
-                                  title: _productDetailsController.productDetails
-                                      .value!.data.data[index].name,
-                                  price: _productDetailsController.productDetails
-                                      .value!.data.data[index].price,
-                                  address: _productDetailsController.productDetails
-                                      .value!.data.data[index].userId.upazila,
-                                  callNumber: _productDetailsController.productDetails
-                                      .value!.data.data[index].userId.phone,
-                                  desc: _productDetailsController.productDetails
-                                      .value!.data.data[index].desc,
-                                  img: [_productDetailsController.productDetails
-                                      .value!.data.data[index].img, _productDetailsController.productDetails
-                                      .value!.data.data[index].img2, _productDetailsController.productDetails
-                                      .value!.data.data[index].img3])),
+                              onTap: () => Get.to(
+                                () => ProductDetailsScreen(
+                                  data: _productDetailsController
+                                      .productDetails.value!,
+                                  index: index,
+                                ),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [

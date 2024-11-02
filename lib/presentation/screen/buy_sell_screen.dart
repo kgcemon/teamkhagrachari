@@ -4,37 +4,66 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/buy_sell_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/screen/add_product_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/product_view_screen.dart';
-import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
 
-class BuySellScreen extends StatelessWidget {
+class BuySellScreen extends StatefulWidget {
   const BuySellScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize the controller
-    final BuySellScreenController controller = Get.put(BuySellScreenController());
+  State<BuySellScreen> createState() => _BuySellScreenState();
+}
 
+class _BuySellScreenState extends State<BuySellScreen> {
+  // Initialize the controller
+  final BuySellScreenController controller = Get.put(BuySellScreenController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(() => const AddProductScreen());
+        },
+        label: const Text(
+          "বিজ্ঞাপন যোগ করুন",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        icon: const Icon(Icons.add, size: 20),
+        backgroundColor: Colors.teal,
+        // You can change this to any color you like
+        splashColor: Colors.tealAccent, // The splash effect color when tapped
+      ),
       appBar: myAppbar(name: "ক্রয়-বিক্রয়"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
           children: [
-
-
-            Image.network("https://scontent-sin6-2.xx.fbcdn.net/v/t1.6435-9/121494759_654934131834439_7226116197254941632_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeGjP5bA7OLyHvGTW8g76itl_DrrmQraxGP8OuuZCtrEYx1Yg25x12jjnh84H8je5lDHZvuyvHAZswB7Yex3t-HA&_nc_ohc=waj4JnTSIE0Q7kNvgFwy-Gc&_nc_ht=scontent-sin6-2.xx&_nc_gid=AWXg0iqbFoBgp0CCAtQgNiR&oh=00_AYAgBtDnqaSVvr3BoFk7DADx7FmhstQedqsJMpEdp9FcTA&oe=673362CE"),
-
-            const SizedBox(height: 10,),
-
+            Image.network(
+                "https://scontent-sin6-2.xx.fbcdn.net/v/t1.6435-9/121494759_654934131834439_7226116197254941632_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeGjP5bA7OLyHvGTW8g76itl_DrrmQraxGP8OuuZCtrEYx1Yg25x12jjnh84H8je5lDHZvuyvHAZswB7Yex3t-HA&_nc_ohc=waj4JnTSIE0Q7kNvgFwy-Gc&_nc_ht=scontent-sin6-2.xx&_nc_gid=AWXg0iqbFoBgp0CCAtQgNiR&oh=00_AYAgBtDnqaSVvr3BoFk7DADx7FmhstQedqsJMpEdp9FcTA&oe=673362CE"),
+            const SizedBox(
+              height: 10,
+            ),
             Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CupertinoActivityIndicator());
+                return const Center(child: LinearProgressIndicator(color: Colors.white,backgroundColor: Colors.green,));
               }
 
               if (controller.categoryList.isEmpty) {
-                return const Center(child: Text('No categories found', style: TextStyle(color: Colors.white)));
+                return const Center(
+                    child: Text('No categories found',
+                        style: TextStyle(color: Colors.white)));
               }
 
               return Expanded(
@@ -46,21 +75,24 @@ class BuySellScreen extends StatelessWidget {
                       mainAxisSpacing: 15,
                       crossAxisCount: getCrossAxisCount(context),
                       mainAxisExtent: 75),
-                  itemBuilder: (context, index) => AnimationConfiguration.staggeredGrid(
+                  itemBuilder: (context, index) =>
+                      AnimationConfiguration.staggeredGrid(
                     position: index,
                     columnCount: 3,
                     duration: const Duration(milliseconds: 900),
                     child: FlipAnimation(
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(()=> ProductViewScreen(categoryId: controller.categoryList[index].id,title: controller.categoryList[index].name,));
+                          Get.to(() => ProductViewScreen(
+                                categoryId: controller.categoryList[index].id,
+                                title: controller.categoryList[index].name,
+                              ));
                         },
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(5),
-
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: FittedBox(
                             child: Padding(
@@ -69,18 +101,22 @@ class BuySellScreen extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     width: 50,
-                                    imageUrl: imgUrlMaker(controller.categoryList[index].icon ?? ""), // Fetch the image URL
+                                    imageUrl: imgUrlMaker(
+                                        controller.categoryList[index].icon ??
+                                            ""),
+                                    // Fetch the image URL
                                     placeholder: (context, url) =>
-                                    const CupertinoActivityIndicator(),
+                                        const CupertinoActivityIndicator(),
                                     errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
+                                        const Icon(Icons.error),
                                     fit: BoxFit.cover,
                                   ),
                                   const SizedBox(
                                     height: 7,
                                   ),
                                   Text(
-                                    controller.categoryList[index].name, // Fetch the category name
+                                    controller.categoryList[index].name,
+                                    // Fetch the category name
                                     style: const TextStyle(
                                         fontSize: 13, color: Colors.white),
                                   ),
@@ -101,11 +137,11 @@ class BuySellScreen extends StatelessWidget {
     );
   }
 
-  String imgUrlMaker(String urls){
-    if(urls.contains("http")){
+  String imgUrlMaker(String urls) {
+    if (urls.contains("http")) {
       var mm = urls.split("http")[1];
       return "https$mm";
-    }else{
+    } else {
       return urls;
     }
   }

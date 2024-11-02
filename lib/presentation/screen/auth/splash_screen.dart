@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
-import 'package:teamkhagrachari/presentation/utils/strings.dart';
 import '../../controller/auth/splash_screen_controller.dart';
 
 class SplashScreen extends StatelessWidget {

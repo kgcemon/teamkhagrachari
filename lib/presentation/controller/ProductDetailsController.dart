@@ -7,6 +7,7 @@ import '../../data/model/ProductDetailsModel.dart';
 
 class ProductDetailsController extends GetxController {
   var isLoading = true.obs;
+  var totalItemCount = "0".obs;
   var productDetails = Rxn<ProductDetailsModel>();
 
   void fetchProductDetails(String catId) async {
@@ -15,7 +16,7 @@ class ProductDetailsController extends GetxController {
       var response = await NetworkCaller.getRequest(url: ApiUrl.productsUrls(catId));
       ProductDetailsModel productDetailsModel = productDetailsModelFromJson(jsonEncode(response.responseData));
       productDetails.value = productDetailsModel;
-      print(response.responseData);
+      totalItemCount.value = productDetailsModel.data.data.length.toString();
     } catch (e) {
       print("Error fetching product details: $e");
     } finally {

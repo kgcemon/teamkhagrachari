@@ -2,7 +2,6 @@ import 'dart:convert';
 
 ProductDetailsModel productDetailsModelFromJson(String str) => ProductDetailsModel.fromJson(json.decode(str));
 
-String productDetailsModelToJson(ProductDetailsModel data) => json.encode(data.toJson());
 
 class ProductDetailsModel {
   int statusCode;
@@ -23,13 +22,6 @@ class ProductDetailsModel {
     message: json["message"],
     data: ProductData.fromJson(json["data"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "statusCode": statusCode,
-    "success": success,
-    "message": message,
-    "data": data.toJson(),
-  };
 }
 
 class ProductData {
@@ -46,19 +38,16 @@ class ProductData {
     data: List<ProductDetails>.from(json["data"].map((x) => ProductDetails.fromJson(x))),
   );
 
-  Map<String, dynamic> toJson() => {
-    "meta": meta.toJson(),
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
 }
 
 class ProductDetails {
   String id;
   String name;
-  String title;
   String brand;
   String desc;
   String price;
+  String isUsed;
+  String? totalView;
   String discountPrice;
   UserId userId;
   CategoryId categoryId;
@@ -66,6 +55,7 @@ class ProductDetails {
   String img;
   String img2;
   String img3;
+  String phone;
   DateTime createdAt;
   DateTime updatedAt;
   int v;
@@ -73,10 +63,11 @@ class ProductDetails {
   ProductDetails({
     required this.id,
     required this.name,
-    required this.title,
     required this.brand,
     required this.desc,
     required this.price,
+    required this.isUsed,
+    required this.totalView,
     required this.discountPrice,
     required this.userId,
     required this.categoryId,
@@ -84,6 +75,7 @@ class ProductDetails {
     required this.img,
     required this.img2,
     required this.img3,
+    required this.phone,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -92,7 +84,6 @@ class ProductDetails {
   factory ProductDetails.fromJson(Map<String, dynamic> json) => ProductDetails(
     id: json["_id"],
     name: json["name"],
-    title: json["title"],
     brand: json["brand"],
     desc: json["desc"],
     price: json["price"],
@@ -103,29 +94,14 @@ class ProductDetails {
     img: json["img"],
     img2: json["img2"],
     img3: json["img3"],
+    totalView: json['totalCount'].toString(),
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
+    isUsed: json['isUsed'],
+    phone: json['phone'],
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "title": title,
-    "brand": brand,
-    "desc": desc,
-    "price": price,
-    "discountPrice": discountPrice,
-    "userId": userId.toJson(),
-    "categoryId": categoryId.toJson(),
-    "subCategoryId": subCategoryId.toJson(),
-    "img": img,
-    "img2": img2,
-    "img3": img3,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-  };
 }
 
 class CategoryId {
@@ -166,18 +142,6 @@ class CategoryId {
     category: json["category"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "name": name,
-    "icon": icon,
-    "description": description,
-    "status": status,
-    "serialNo": serialNo,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-    "category": category,
-  };
 }
 
 class UserId {
@@ -215,17 +179,6 @@ class UserId {
     v: json["__v"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "isDonor": isDonor,
-    "_id": id,
-    "email": email,
-    "name": name,
-    "phone": phone,
-    "upazila": upazila,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-  };
 }
 
 class Meta {
@@ -245,9 +198,4 @@ class Meta {
     total: json["total"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "page": page,
-    "limit": limit,
-    "total": total,
-  };
 }
