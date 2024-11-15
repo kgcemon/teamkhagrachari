@@ -30,7 +30,7 @@ class _BloodScreenState extends State<BloodScreen> {
 
   loadDialoge() async {
     Get.defaultDialog(
-      backgroundColor: MyColors.primaryColor,
+      backgroundColor: const Color(0xff77040d),
       titleStyle: const TextStyle(color: Colors.white),
       title: "রক্তদাতা খুঁজছেন?",
       actions: [
@@ -60,9 +60,11 @@ class _BloodScreenState extends State<BloodScreen> {
       backgroundColor: MyColors.primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             children: [
+              Image.network("https://khagrachariplus.com/wp-content/uploads/2024/11/blood.gif"),
+              const SizedBox(height: 10,),
               Row(
                 children: [
                   Expanded(

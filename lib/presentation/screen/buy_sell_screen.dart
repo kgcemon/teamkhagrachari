@@ -51,7 +51,7 @@ class _BuySellScreenState extends State<BuySellScreen> {
         child: Column(
           children: [
             Image.network(
-                "https://scontent-sin6-2.xx.fbcdn.net/v/t1.6435-9/121494759_654934131834439_7226116197254941632_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeGjP5bA7OLyHvGTW8g76itl_DrrmQraxGP8OuuZCtrEYx1Yg25x12jjnh84H8je5lDHZvuyvHAZswB7Yex3t-HA&_nc_ohc=waj4JnTSIE0Q7kNvgFwy-Gc&_nc_ht=scontent-sin6-2.xx&_nc_gid=AWXg0iqbFoBgp0CCAtQgNiR&oh=00_AYAgBtDnqaSVvr3BoFk7DADx7FmhstQedqsJMpEdp9FcTA&oe=673362CE"),
+                "https://khagrachariplus.com/wp-content/uploads/2024/07/Add-KP-scaled.jpg"),
             const SizedBox(
               height: 10,
             ),

@@ -193,6 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 }).toList(),
                 sebaName: 'Important Services',
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Image.network("https://khagrachariplus.com/wp-content/uploads/2024/10/Khagrahcari-Plus-ad.gif"),
+              ),
+              const SizedBox(height: 70,)
             ],
           ),
         ),

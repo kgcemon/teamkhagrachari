@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:teamkhagrachari/presentation/controller/profile_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/controller/user_auth_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/about_us_screen.dart';
+import 'package:teamkhagrachari/presentation/screen/auth/login_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
-import '../screen/profile/profile_update_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -72,6 +72,20 @@ class CustomDrawer extends StatelessWidget {
               title: const Text("Privacy Policy"),
               leading: const Icon(Icons.privacy_tip, color: Colors.green),
             ),
+            UserAuthController.accessToken.isNotEmpty
+                ? ListTile(
+              tileColor: MyColors.primaryColor,
+              onTap: () {
+                UserAuthController.clearUserData().then((value) {
+                  // Reset selected index to home (0)
+                  Get.to(()=>const LoginScreen());
+                });
+              },
+              title: const Text("Log Out"),
+              leading: const Icon(Icons.logout_outlined, color: Colors.green),
+            )
+                : const SizedBox(),
+
           ],
         ));
   }
