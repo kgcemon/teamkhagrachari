@@ -3,6 +3,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
@@ -57,6 +58,22 @@ class _BloodScreenState extends State<BloodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(()=> const ProfileScreen());
+        },
+        label: const Text(
+          "রক্তদাতা হিসাবে যুক্ত হোন",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        icon: const Icon(Icons.add,color: Colors.white, size: 20),
+        backgroundColor: Colors.red, // You can change this to any color you like
+        splashColor: Colors.tealAccent, // The splash effect color when tapped
+      ),
       backgroundColor: MyColors.primaryColor,
       body: SafeArea(
         child: Padding(
@@ -246,6 +263,7 @@ class _BloodScreenState extends State<BloodScreen> {
                   );
                 },
               ),
+              SizedBox(height: 65,)
             ],
           ),
         ),

@@ -148,6 +148,56 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                           return null;
                         },
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "আপনি কি রক্ত দানে আগ্রহি?",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          GetBuilder<UserProfileUpdateController>(
+                            builder: (controller) => Checkbox(
+                              shape: const RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.white)),
+                              value: controller.isDonor,
+                              onChanged: (value) {
+                                controller.setDonorStatus(value!);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      DropdownButtonFormField<String>(
+                        icon: const Icon(
+                          Icons.bloodtype,
+                          color: Colors.red,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: MyColors.secenderyColor,
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: "রক্তের গ্রুপ $bloodGroup",
+                          labelStyle: TextStyle(color: MyColors.white),
+                        ),
+                        dropdownColor: MyColors.secenderyColor,
+                        style: TextStyle(color: MyColors.white),
+                        items: bloodGroups.map((String group) {
+                          return DropdownMenuItem<String>(
+                            value: group,
+                            child: Text(group),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            bloodGroup = newValue!;
+                          });
+                        },
+                        onSaved: (value) {
+                          bloodGroup = value!;
+                        },
+                      ),
                       const SizedBox(height: 15),
                       TextFormField(
                         controller: dateController,
@@ -181,56 +231,6 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                       const SizedBox(height: 15),
                       DropdownButtonFormField<String>(
                         icon: const Icon(
-                          Icons.bloodtype,
-                          color: Colors.red,
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: bloodGroup,
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        dropdownColor: MyColors.secenderyColor,
-                        style: TextStyle(color: MyColors.white),
-                        items: bloodGroups.map((String group) {
-                          return DropdownMenuItem<String>(
-                            value: group,
-                            child: Text(group),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            bloodGroup = newValue!;
-                          });
-                        },
-                        onSaved: (value) {
-                          bloodGroup = value!;
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "আপনি কি রক্ত দানে আগ্রহি?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          GetBuilder<UserProfileUpdateController>(
-                            builder: (controller) => Checkbox(
-                              shape: const RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.white)),
-                              value: controller.isDonor,
-                              onChanged: (value) {
-                                controller.setDonorStatus(value!);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      DropdownButtonFormField<String>(
-                        icon: const Icon(
                           Icons.location_on,
                           color: Colors.green,
                         ),
@@ -239,7 +239,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                           fillColor: MyColors.secenderyColor,
                           focusedBorder: inputStyle(),
                           enabledBorder: inputStyle(),
-                          labelText: upozilaController.text,
+                          labelText: "উপজেলা: $upazila",
                           labelStyle: TextStyle(color: MyColors.white),
                         ),
                         dropdownColor: MyColors.secenderyColor,
@@ -276,7 +276,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                                   false
                               ? ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Colors.green,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -313,7 +313,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                                   },
                                   child: const Text(
                                     'Update Profile',
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 )
                               : const CircularProgressIndicator()),

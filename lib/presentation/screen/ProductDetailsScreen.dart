@@ -215,7 +215,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Condition:  ${product.isUsed == true ? 'Used' : product.isUsed == false ? 'New' : 'N/A' }",
+            "Condition:  ${product.isUsed}",
             style: const TextStyle(color: Colors.grey),
           ),
           Text(

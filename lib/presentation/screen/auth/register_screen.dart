@@ -117,26 +117,26 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                       const SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "আপনি কি রক্ত দানে আগ্রহি?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          GetBuilder<RegisterController>(
-                            builder: (controller) => Checkbox(
-                              focusColor: Colors.red,
-                              fillColor: const MaterialStatePropertyAll(Colors.green),
-                              shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
-                              value: controller.isDonor,
-                              onChanged: (value) {
-                                controller.setDonorStatus(value!);
-                              },
-                            ),
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     const Text(
+                      //       "আপনি কি রক্ত দানে আগ্রহি?",
+                      //       style: TextStyle(color: Colors.white),
+                      //     ),
+                      //     GetBuilder<RegisterController>(
+                      //       builder: (controller) => Checkbox(
+                      //         focusColor: Colors.red,
+                      //         fillColor: const MaterialStatePropertyAll(Colors.green),
+                      //         shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+                      //         value: controller.isDonor,
+                      //         onChanged: (value) {
+                      //           controller.setDonorStatus(value!);
+                      //         },
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       GetBuilder<RegisterController>(builder: (controller) =>
                       controller.isDonor == true ?  DropdownButtonFormField<String>(
                         icon: const Icon(Icons.bloodtype,color: Colors.red,),

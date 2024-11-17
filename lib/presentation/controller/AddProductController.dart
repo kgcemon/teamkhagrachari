@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'dart:convert';
-import 'dart:developer'; // Import for logging
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:teamkhagrachari/presentation/screen/dashboard/home_screen.dart';
 import '../../data/model/buysell_category_model.dart';
 import '../../data/urls..dart';
-import '../controller/user_auth_controller.dart'; // Import your UserAuthController
+import '../controller/user_auth_controller.dart';
 
 class AddProductController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -85,7 +84,7 @@ class AddProductController extends GetxController {
   Future<void> pickImage(int index) async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 20,
+      imageQuality: 15,
     );
 
     if (pickedFile != null) {
@@ -134,24 +133,20 @@ class AddProductController extends GetxController {
       loading.value = true;
 
       // Map condition to isUsed
-      bool isUsed = selectedCondition.value != 'New';
+      dynamic isUsed = selectedCondition.value;
 
       // Prepare the data
       final url = ApiUrl.addProductUrl; // Your API URL as a String
 
       try {
         var request = http.MultipartRequest('POST', Uri.parse(url));
-
         // Logging the URL
         log('Submitting product to: $url');
-
         // Getting the token
         String token = UserAuthController.accessToken;
         log('Using token: $token');
-
         // Adding headers
         request.headers['Authorization'] = token;
-
         // Add text fields
         request.fields['title'] = titleController.text.trim();
         request.fields['name'] = nameController.text.trim();

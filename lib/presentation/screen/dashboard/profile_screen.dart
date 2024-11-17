@@ -167,6 +167,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         value: "আপনার সকল সেবা সেখতে ক্লিক করুন",
                         iconData: Icons.local_activity),
                   ),
+                  InkWell(
+                    onTap: () => Get.to(() => const UserProfileServiceScreen()),
+                    child: const ProfileItem(
+                        label: 'আপনার পণ্য সমুহ',
+                        value: "আপনার সকল পণ্য সেখতে ক্লিক করুন",
+                        iconData: Icons.production_quantity_limits),
+                  ),
                   ProfileItem(
                     label: 'সর্বশেষ রক্তদানের তারিখ:',
                     value: BanglaConvertor.convertPrice(

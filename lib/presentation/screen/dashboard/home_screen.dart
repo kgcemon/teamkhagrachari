@@ -206,12 +206,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _dedicatedServices() {
-    // Filter services based on the search query
     List filteredServices = dedicatedServicesList
         .where((service) =>
             service["name"].toString().toLowerCase().contains(searchQuery))
         .toList();
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -238,56 +236,84 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _dedicatedServicesCard(List services, int i) {
-    return AnimationLimiter(
-      child: AnimationConfiguration.staggeredList(
-        position: i,
-        duration: const Duration(milliseconds: 500),
-        child: SlideAnimation(
-          verticalOffset: 50.0,
-          child: FadeInAnimation(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 5),
-              child: Container(
-                width: 100,
-                height: 80,
-                padding: const EdgeInsets.all(10),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.13),
-                  borderRadius: BorderRadius.circular(10),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          right: -0,
+          child: services[i]['name'] == "রক্তদাতা" || services[i]['name'] == "ক্রয়-বিক্রয়" ?  Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green.withOpacity(0.8), // Gold-like color
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.green.withOpacity(0.5),
+                  blurRadius: 10,
+                  spreadRadius: 2,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      services[i]['image'],
-                      height: 30,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.error, size: 30);
-                      },
+              ],
+            ),
+            child: const Icon(
+              Icons.star,
+              color: Colors.white,
+              size: 15,
+            ),
+          ) : const Text(""),
+        ),
+        AnimationLimiter(
+          child: AnimationConfiguration.staggeredList(
+            position: i,
+            duration: const Duration(milliseconds: 500),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 5),
+                  child: Container(
+                    width: 100,
+                    height: 80,
+                    padding: const EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.13),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    const SizedBox(height: 5),
-                    FittedBox(
-                      child: Text(
-                        services[i]['name'],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                          fontFamily: "banglafont",
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          services[i]['image'],
+                          height: 30,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.error, size: 30);
+                          },
                         ),
-                      ),
+                        const SizedBox(height: 5),
+                        FittedBox(
+                          child: Text(
+                            services[i]['name'],
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontFamily: "banglafont",
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
+
 }
 
 class ImageSliderWidget extends StatelessWidget {
