@@ -43,7 +43,7 @@ class EditServiceController extends GetxController {
       // Make the PUT or PATCH request
       final response = await NetworkCaller.patchRequest(
         url: "https://api.khagrachariplus.com/api/v1/services/$serviceId",
-        body: updateData,
+        body: updateData, isMultipart: true, token: null,
       );
 
       if (response.responseCode == 200) {

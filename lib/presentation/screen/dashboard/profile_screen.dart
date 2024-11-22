@@ -54,29 +54,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(90)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(90),
-                                  child: Image.network(
-                                    "https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg",
-                                    height: 60,
-                                  ),
-                                )),
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundImage: NetworkImage(
+                                Get.find<ProfileScreenController>()
+                                    .profileData
+                                    .data!
+                                    .image
+                                    .toString(),
+                              ),
+                            ),
                             GestureDetector(
                               onTap: () => Get.to(() => ProfileUpdateScreen(
-                                profileData: Get.find<ProfileScreenController>().profileData,
-                              )),
+                                    profileData:
+                                        Get.find<ProfileScreenController>()
+                                            .profileData,
+                                  )),
                               child: Container(
-                                padding:  const EdgeInsets.all(5),
-                                decoration:  BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5)),
                                     color: MyColors.secenderyColor),
-                                child: const Text("Edit Profile",
-                                  style: TextStyle(color: Colors.white),),
+                                child: const Text(
+                                  "Edit Profile",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                           ],
@@ -129,9 +132,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.orange),
-                                  onPressed: () =>
-                                      Get.to(
-                                              () => const AddUserServiceScreen()),
+                                  onPressed: () => Get.to(
+                                      () => const AddUserServiceScreen()),
                                   child: const Text(
                                     "সেবা যুক্ত করুন",
                                     style: TextStyle(color: Colors.white),
@@ -145,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green),
                                   onPressed: () {
-                                    Get.to(()=> const AddProductScreen());
+                                    Get.to(() => const AddProductScreen());
                                   },
                                   child: const Text(
                                     "পণ্য বিক্রি করুন",
@@ -191,24 +193,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     value: "${BanglaConvertor.convertPrice(
                       DateFormat('dd/MM/yyyy').format(
                         DateTime.parse(controller
-                            .profileData.data!.lastDonateDate
-                            .toString())
+                                .profileData.data!.lastDonateDate
+                                .toString())
                             .toLocal()
                             .add(const Duration(days: 120)),
                       ),
-                    )} (${BanglaConvertor.convertPrice((DateTime
-                        .parse(
-                        controller.profileData.data!.lastDonateDate.toString())
-                        .add(const Duration(days: 120))
-                        .difference(DateTime.now())
-                        .inDays).toString()).contains("-")
-                        ? "আপনি এখন রক্ত দিতে পারবেন"
-                        : "${BanglaConvertor.convertPrice((DateTime
-                        .parse(
-                        controller.profileData.data!.lastDonateDate.toString())
-                        .add(const Duration(days: 120))
-                        .difference(DateTime.now())
-                        .inDays).toString())}দিন বাকি"})",
+                    )} (${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString()).contains("-") ? "আপনি এখন রক্ত দিতে পারবেন" : "${BanglaConvertor.convertPrice((DateTime.parse(controller.profileData.data!.lastDonateDate.toString()).add(const Duration(days: 120)).difference(DateTime.now()).inDays).toString())}দিন বাকি"})",
                     iconData: Icons.date_range,
                   ),
                 ],
@@ -226,10 +216,11 @@ class ProfileItem extends StatelessWidget {
   final String value;
   final IconData iconData;
 
-  const ProfileItem({super.key,
-    required this.label,
-    required this.value,
-    required this.iconData});
+  const ProfileItem(
+      {super.key,
+      required this.label,
+      required this.value,
+      required this.iconData});
 
   @override
   Widget build(BuildContext context) {

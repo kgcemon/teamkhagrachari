@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Icon(
               Icons.star,
               color: Colors.white,
-              size: 15,
+              size: 10,
             ),
           ) : const Text(""),
         ),

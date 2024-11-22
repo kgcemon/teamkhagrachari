@@ -25,6 +25,7 @@ class ProfileData {
   String? updatedAt;
   int? iV;
   String? lastDonateDate;
+  String? image;
 
   ProfileData(
       {this.sId,
@@ -37,6 +38,7 @@ class ProfileData {
         this.createdAt,
         this.updatedAt,
         this.lastDonateDate,
+        this.image,
         this.iV});
 
   ProfileData.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class ProfileData {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     lastDonateDate = json['lastDonateDate'];
+    image = json['image'];
     iV = json['__v'];
   }
 }

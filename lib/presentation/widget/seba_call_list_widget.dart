@@ -153,6 +153,6 @@ class SebaCallListState extends State<SebaCallList> {
   }
 
   void _countAdd(String id) async {
-    await NetworkCaller.patchRequest(url: "${ApiUrl.viewCountUrl}/$id");
+    await NetworkCaller.patchRequest(url: "${ApiUrl.viewCountUrl}/$id", isMultipart: false, token: null);
   }
 }
