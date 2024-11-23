@@ -7,7 +7,7 @@ import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dar
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
-import 'dart:math'; // Import the dart:math package
+import 'dart:math';
 
 class BloodScreen extends StatefulWidget {
   const BloodScreen({super.key});
@@ -25,7 +25,7 @@ class _BloodScreenState extends State<BloodScreen> {
     super.initState();
     Future.delayed(
       const Duration(seconds: 1),
-          () => loadDialoge(),
+      () => loadDialoge(),
     );
   }
 
@@ -60,7 +60,7 @@ class _BloodScreenState extends State<BloodScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.to(()=> const ProfileScreen());
+          Get.to(() => const ProfileScreen());
         },
         label: const Text(
           "রক্তদাতা হিসাবে যুক্ত হোন",
@@ -70,202 +70,230 @@ class _BloodScreenState extends State<BloodScreen> {
             color: Colors.white,
           ),
         ),
-        icon: const Icon(Icons.add,color: Colors.white, size: 20),
-        backgroundColor: Colors.red, // You can change this to any color you like
+        icon: const Icon(Icons.add, color: Colors.white, size: 20),
+        backgroundColor: Colors.green,
+        // You can change this to any color you like
         splashColor: Colors.tealAccent, // The splash effect color when tapped
       ),
       backgroundColor: MyColors.primaryColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            children: [
-              Image.network("https://khagrachariplus.com/wp-content/uploads/2024/11/blood.gif"),
-              const SizedBox(height: 10,),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.13),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButton<String>(
-                        value: selectedBloodGroup,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedBloodGroup = value!;
-                          });
-                          Get.find<BloodScreenController>().filterDonors(
-                            bloodGroup: selectedBloodGroup,
-                            upazila: selectedUpazila,
-                          );
-                        },
-                        items: <String>[
-                          'রক্তের গ্রুপ',
-                          'A+',
-                          'A-',
-                          'B+',
-                          'B-',
-                          'AB+',
-                          'AB-',
-                          'O+',
-                          'O-'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: MyColors.white),
-                            ),
-                          );
-                        }).toList(),
-                        hint: const Text('Select Blood Group'),
-                        isExpanded: true,
-                        dropdownColor: MyColors.secenderyColor,
-                        style: TextStyle(color: MyColors.white),
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Column(
+          children: [
+            Image.network(
+                "https://khagrachariplus.com/wp-content/uploads/2024/11/blood.gif"),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.13),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedBloodGroup,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedBloodGroup = value!;
+                        });
+                        Get.find<BloodScreenController>().filterDonors(
+                          bloodGroup: selectedBloodGroup,
+                          upazila: selectedUpazila,
+                        );
+                      },
+                      items: <String>[
+                        'রক্তের গ্রুপ',
+                        'A+',
+                        'A-',
+                        'B+',
+                        'B-',
+                        'AB+',
+                        'AB-',
+                        'O+',
+                        'O-'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: MyColors.white),
+                          ),
+                        );
+                      }).toList(),
+                      hint: const Text('Select Blood Group'),
+                      isExpanded: true,
+                      dropdownColor: MyColors.secenderyColor,
+                      style: TextStyle(color: MyColors.white),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.13),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButton<String>(
-                        value: selectedUpazila,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedUpazila = value!;
-                          });
-                          Get.find<BloodScreenController>().filterDonors(
-                            bloodGroup: selectedBloodGroup,
-                            upazila: selectedUpazila,
-                          );
-                        },
-                        items: <String>[
-                          'উপজেলা',
-                          'খাগড়াছড়ি সদর',
-                          'পানছড়ি',
-                          'মাটিরাঙ্গা',
-                          'দীঘিনালা',
-                          'মানিকছড়ি',
-                          'লক্ষীছড়ি',
-                          'মহালছড়ি',
-                          'গুইমারা',
-                          'রামগড়',
-                          'ঢাকা',
-                          'চট্টগ্রাম'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: MyColors.white),
-                            ),
-                          );
-                        }).toList(),
-                        hint: const Text('Select Upazila'),
-                        isExpanded: true,
-                        dropdownColor: MyColors.secenderyColor,
-                        style: TextStyle(color: MyColors.white),
-                      ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.13),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedUpazila,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedUpazila = value!;
+                        });
+                        Get.find<BloodScreenController>().filterDonors(
+                          bloodGroup: selectedBloodGroup,
+                          upazila: selectedUpazila,
+                        );
+                      },
+                      items: <String>[
+                        'উপজেলা',
+                        'খাগড়াছড়ি সদর',
+                        'পানছড়ি',
+                        'মাটিরাঙ্গা',
+                        'দীঘিনালা',
+                        'মানিকছড়ি',
+                        'লক্ষীছড়ি',
+                        'মহালছড়ি',
+                        'গুইমারা',
+                        'রামগড়',
+                        'ঢাকা',
+                        'চট্টগ্রাম'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: MyColors.white),
+                          ),
+                        );
+                      }).toList(),
+                      hint: const Text('Select Upazila'),
+                      isExpanded: true,
+                      dropdownColor: MyColors.secenderyColor,
+                      style: TextStyle(color: MyColors.white),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              GetBuilder<BloodScreenController>(
-                builder: (value) {
-                  // Shuffle the list to make it random
-                  final random = Random();
-                  final shuffledList = value.filteredList.toList()..shuffle(random);
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            GetBuilder<BloodScreenController>(
+              builder: (value) {
+                // Shuffle the list to make it random
+                final random = Random();
+                final shuffledList = value.filteredList.toList()
+                  ..shuffle(random);
 
-                  return Expanded(
-                    child: Visibility(
-                      visible: shuffledList.isNotEmpty,
-                      replacement: Lottie.asset(AssetPath.loadingJson),
-                      child: AnimationLimiter(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final donor = shuffledList[index];
-                            final lastDonateDate =
-                            DateTime.parse(donor.lastDonateDate ?? '');
-                            final difference =
-                                DateTime.now().difference(lastDonateDate).inDays;
-                            final textColor =
-                            difference >= 120 ? Colors.green : Colors.red;
+                return Expanded(
+                  child: Visibility(
+                    visible: shuffledList.isNotEmpty,
+                    replacement: Lottie.asset(AssetPath.loadingJson),
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final donor = shuffledList[index];
+                          final lastDonateDate =
+                              DateTime.parse(donor.lastDonateDate ?? '');
+                          final difference = DateTime.now()
+                              .difference(lastDonateDate)
+                              .inDays;
+                          final textColor =
+                              difference >= 120 ? Colors.green : Colors.red;
 
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 900),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: textColor),
-                                        color: Colors.white.withOpacity(0.13),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ListTile(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(15)),
-                                        tileColor: Colors.transparent,
-                                        onTap: () => _popup(donor, textColor),
-                                        leading: CircleAvatar(
-                                          backgroundColor: textColor,
-                                          child: Text(
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 900),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: textColor),
+                                      color: Colors.white.withOpacity(0.13),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: ListTile(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0)),
+                                      tileColor: Colors.transparent,
+                                      onTap: () => _popup(donor, textColor),
+                                      leading: Container(
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(image: NetworkImage(donor.image ?? ""),fit: BoxFit.cover),
+                                          borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(color: difference >= 120 ? Colors.green : Colors.red)),
+                                        ),
+                                      title: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
                                             donor.bloodGroup ?? '',
-                                            style:
-                                            TextStyle(color: MyColors.white),
+                                            style: TextStyle(
+                                                color: difference >= 120
+                                                    ? Colors.green
+                                                    : Colors.red),
                                           ),
-                                        ),
-                                        title: Text(
-                                          donor.name ?? '',
-                                          style: TextStyle(color: MyColors.white),
-                                        ),
-                                        subtitle: Text(
-                                          donor.upazila ?? '',
-                                          style: TextStyle(color: MyColors.white),
-                                        ),
-                                        trailing: InkWell(
-                                          onTap: () =>
-                                              uriLaunchUrl('tel:${donor.phone}'),
-                                          child: const Icon(
-                                            Icons.call,
-                                            size: 35,
-                                            color: Colors.green,
+                                          Text(
+                                            donor.name ?? '',
+                                            style: TextStyle(
+                                                color: MyColors.white),
                                           ),
-                                        ),
+                                        ],
                                       ),
+                                      subtitle: Text(
+                                        donor.upazila ?? '',
+                                        style: const TextStyle(
+                                            color: Colors.yellow,
+                                            fontSize: 10),
+                                      ),
+                                      trailing:  SizedBox(
+                                              width: 80,
+                                              height: 25,
+                                              child: ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(backgroundColor: difference >= 120
+                                                    ? Colors.green : Colors.red),
+                                                onPressed: () => difference >= 120
+                                                    ? uriLaunchUrl('tel:${donor.phone}') : null,
+                                                icon: const Icon(Icons.call,color: Colors.white,size: 12,),
+                                                label: const Text(
+                                                  "Call",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                          itemCount: shuffledList.length,
-                        ),
+                            ),
+                          );
+                        },
+                        itemCount: shuffledList.length,
                       ),
                     ),
-                  );
-                },
-              ),
-              SizedBox(height: 65,)
-            ],
-          ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -275,89 +303,152 @@ class _BloodScreenState extends State<BloodScreen> {
     Get.defaultDialog(
       title: "রক্তদাতার বিবরণ",
       backgroundColor: MyColors.primaryColor,
-      titleStyle: TextStyle(color: MyColors.white),
+      titleStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       content: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const CircleAvatar(
-            child: Icon(Icons.person),
+          // Avatar with donor image
+          CircleAvatar(
+            radius: 45,
+            backgroundColor: Colors.white,
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(donor.image),
+            ),
           ),
+          const SizedBox(height: 15),
+
+          // Donor name
           Text(
             donor.name ?? '',
             style: const TextStyle(
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: Colors.white,
+              fontSize: 18,
             ),
           ),
           const SizedBox(height: 10),
-          _buildPopUp(
-            donor.lastDonateDate?.split("T")[0] ?? '',
-            "সর্বশেষ রক্তদানের তারিখ:",
-            textColor,
+
+          // Last donation date
+          FittedBox(
+            child: _buildPopUp(
+              donor.lastDonateDate?.split("T")[0] ?? '',
+              "সর্বশেষ রক্তদানের তারিখ:",
+              textColor,
+            ),
           ),
+
+          // Upazila
           _buildPopUp(
             donor.upazila ?? '',
             "উপজেলা:",
+            textColor,
           ),
+
+          // Phone number
           _buildPopUp(
             donor.phone ?? '',
             "ফোন:",
+            textColor,
           ),
         ],
       ),
       actions: [
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(70, 40),
-            backgroundColor: Colors.green,
-          ),
-          onPressed: () => uriLaunchUrl('tel:${donor.phone ?? ''}'),
-          icon: const Icon(Icons.call, color: Colors.white,),
-          label: const Text("Call", style: TextStyle(color: Colors.white),),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(70, 40),
-            backgroundColor: Colors.red,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text(
-            "Cancel",
-            style: TextStyle(color: Colors.white),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // Call Button
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(90, 40),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                shadowColor: Colors.black26,
+                elevation: 4,
+              ),
+              onPressed: () => textColor == Colors.green
+                  ? uriLaunchUrl('tel:${donor.phone ?? ''}') : null,
+              icon: const Icon(
+                Icons.call,
+                color: Colors.white,
+              ),
+              label: const Text(
+                "Call",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+
+            // Cancel Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(90, 40),
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                shadowColor: Colors.black26,
+                elevation: 4,
+              ),
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildPopUp(String data, String name, [Color? textColor]) {
+// Reusable widget for displaying donor details
+  Widget _buildPopUp(String data, String label, [Color? textColor]) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: MyColors.white),
+          color: MyColors.secenderyColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: MyColors.white, width: 0.8),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              name,
+              label,
               style: const TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
+                fontSize: 16,
               ),
             ),
-            const SizedBox(width: 5),
             Text(
               data,
-              style: TextStyle(color: textColor ?? MyColors.white),
+              style: TextStyle(
+                color: textColor ?? MyColors.white,
+                fontSize: 16,
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
 }

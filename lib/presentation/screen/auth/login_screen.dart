@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/auth/login_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/auth/register_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/main_nav_screen.dart';
+import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import '../../controller/main_bottom_nav_bar_controller.dart';
 import '../../controller/profile_screen_controller.dart';
 import '../../utils/color.dart';
@@ -24,7 +25,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
 
   LoginController controller = LoginController();
 
@@ -62,6 +62,10 @@ class LoginScreenState extends State<LoginScreen> {
             child: ListView(
               shrinkWrap: true,
               children: <Widget>[
+                Image.asset(
+                  AssetPath.mainLogoPNG,
+                  height: 120,
+                ),
                 Text(
                   'লগ ইন করুন',
                   style: TextStyle(
@@ -95,87 +99,135 @@ class LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 15),
-                Obx(() => TextFormField(
-                  controller: passwordController,
-                  style: TextStyle(color: MyColors.white),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: MyColors.secenderyColor,
-                    focusedBorder: inputStyle(),
-                    enabledBorder: inputStyle(),
-                    labelText: 'পাসওয়ার্ড',
-                    labelStyle: TextStyle(color: MyColors.white),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        controller.obscurePassword.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: MyColors.white,
+                Obx(
+                  () => TextFormField(
+                    controller: passwordController,
+                    style: TextStyle(color: MyColors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: MyColors.secenderyColor,
+                      focusedBorder: inputStyle(),
+                      enabledBorder: inputStyle(),
+                      labelText: 'পাসওয়ার্ড',
+                      labelStyle: TextStyle(color: MyColors.white),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          controller.obscurePassword.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: MyColors.white,
+                        ),
+                        onPressed: () {
+                          controller.obscurePasswordChanger();
+                        },
                       ),
-                      onPressed: () {
-                        controller.obscurePasswordChanger();
-                      },
                     ),
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: controller.obscurePassword.value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      phoneNumber = value!;
+                    },
                   ),
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: controller.obscurePassword.value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    phoneNumber = value!;
-                  },
-                ),),
+                ),
                 const SizedBox(height: 20),
                 Obx(() => controller.isProgress.value == true
                     ? const CupertinoActivityIndicator(
-                  color: Colors.white,
-                )
-                    : ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      controller
-                          .userLogin(
-                        email: emailController.text,
-                        password: passwordController.text,
+                        color: Colors.white,
                       )
-                          .then(
-                            (value) async {
-                          if (value == true) {
-                            Get.snackbar(
-                                backgroundColor: Colors.green.shade500,
-                                "Success", "Login Successful");
-                            await Get.find<ProfileScreenController>()
-                                .getProfile();
-                            Get.offAll(() => const MainNavScreen(
-                              title: 'Khagrachari Plus',
-                            ));
-                            Get.find<NavButtonControllerController>()
-                                .selectedIndex = 2;
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            controller
+                                .userLogin(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            )
+                                .then(
+                              (value) async {
+                                if (value == true) {
+                                  Get.snackbar(
+                                      backgroundColor: Colors.green.shade500,
+                                      "Success",
+                                      "Login Successful");
+                                  await Get.find<ProfileScreenController>()
+                                      .getProfile();
+                                  Get.offAll(() => const MainNavScreen(
+                                        title: 'Khagrachari Plus',
+                                      ));
+                                  Get.find<NavButtonControllerController>()
+                                      .selectedIndex = 2;
+                                }
+                              },
+                            );
                           }
                         },
-                      );
-                    }
-                  },
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                )),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )),
                 const SizedBox(
                   height: 15,
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
+                Center(
+                    child: InkWell(
+                        onTap: () => showDialog(
+                              builder: (context) => AlertDialog(
+                                surfaceTintColor: MyColors.secenderyColor,
+                                backgroundColor: MyColors.primaryColor,
+                                content:  SizedBox(
+                                  height: 130,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Text("আপনার পাসওয়ার্ড রিসেট করতে অনুগ্রহ করে আপনার ইমেইলটি লিখুন।",style: TextStyle(color: Colors.grey),),
+                                      const SizedBox(height: 20,),
+                                      TextField(
+                                        controller: emailController,
+                                        keyboardType: TextInputType.emailAddress,
+                                        decoration: const InputDecoration(
+                                            label: Text("ইমেইল দিন")),
+                                        style: const TextStyle(color: Colors.white),),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                              Obx(() => controller.isProgress.value != true ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                  onPressed: () {
+                               if(emailController.text.length>4 && emailController.text.contains("@")){
+                                 controller.forgetPassApiCall(email: emailController.text);
+                               }else{
+                                 Get.snackbar("Result", "আপনার ইমেইল দিন");
+                               }
+                              }, child: const Text("Send",style: TextStyle(color: Colors.white),))  : const CircularProgressIndicator(),
+                                ),
+                                  ElevatedButton(onPressed: () {
+                                    Get.back();
+                                  }, child: const Text("Cancel"))
+                                ],
+                              ),
+                              context: context,
+                            ),
+                        child: const Text(
+                          "পাসওয়ার্ড ভুলে গেছেন?",
+                          style: TextStyle(color: Colors.white),
+                        ))),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -206,9 +258,10 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   OutlineInputBorder inputStyle() => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(12),
-    borderSide: BorderSide(
-      color: MyColors.white,
-    ),
-  );
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: MyColors.white,
+        ),
+      );
+
 }

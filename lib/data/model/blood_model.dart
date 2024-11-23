@@ -9,6 +9,7 @@ class BloodModel {
   bool? isDonor;
   String? createdAt;
   String? updatedAt;
+  String? image;
   int? iV;
 
   BloodModel(
@@ -22,6 +23,7 @@ class BloodModel {
         this.isDonor,
         this.createdAt,
         this.updatedAt,
+        this.image,
         this.iV});
 
   BloodModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class BloodModel {
     isDonor = json['isDonor'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    image = json['image'];
     iV = json['__v'];
   }
 

@@ -98,32 +98,54 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   Widget _buildProfileImage() {
     return GestureDetector(
       onTap: _pickImage,
-      child: CircleAvatar(
-        radius: 60,
-        backgroundColor: MyColors.secenderyColor,
-        backgroundImage: _imageFile != null
-            ? FileImage(_imageFile!)
-            : (widget.profileData.data!.image != null &&
-            widget.profileData.data!.image!.isNotEmpty)
-            ? NetworkImage(widget.profileData.data!.image!)
-        as ImageProvider
-            : null,
-        child: (_imageFile == null &&
-            (widget.profileData.data!.image == null ||
-                widget.profileData.data!.image!.isEmpty))
-            ? Icon(
-          Icons.camera_alt,
-          color: MyColors.white,
-          size: 50,
-        )
-            : null,
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 60,
+            backgroundColor: MyColors.secenderyColor,
+            backgroundImage: _imageFile != null
+                ? FileImage(_imageFile!)
+                : (widget.profileData.data!.image != null &&
+                widget.profileData.data!.image!.isNotEmpty)
+                ? NetworkImage(widget.profileData.data!.image!)
+            as ImageProvider
+                : null,
+            child: (_imageFile == null &&
+                (widget.profileData.data!.image == null ||
+                    widget.profileData.data!.image!.isEmpty))
+                ? Icon(
+              Icons.camera_alt,
+              color: MyColors.white,
+              size: 50,
+            )
+                : null,
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: MyColors.primaryColor, width: 2),
+              ),
+              child:  Icon(
+                Icons.camera_alt,
+                color: MyColors.primaryColor,
+                size: 25,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
+
   Widget _buildTextField(TextEditingController controller, String labelText,
       String validationMessage,
-      {TextInputType keyboardType = TextInputType.text, bool enabled = true}) {
+      {TextInputType keyboardType = TextInputType.text,
+        bool enabled = true}) {
     return TextFormField(
       controller: controller,
       style: TextStyle(color: MyColors.white),
@@ -220,6 +242,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
         ),
         GetBuilder<UserProfileUpdateController>(
           builder: (controller) => Checkbox(
+            fillColor: const WidgetStatePropertyAll(Colors.white),
             shape: const RoundedRectangleBorder(
               side: BorderSide(color: Colors.white),
               borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -227,9 +250,10 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
             value: controller.isDonor,
             onChanged: (value) {
               controller.setDonorStatus(value!);
+              setState(() {});
             },
             activeColor: MyColors.secenderyColor,
-            checkColor: MyColors.white,
+            checkColor: Colors.green,
           ),
         ),
       ],
@@ -247,7 +271,10 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Update Profile",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Update Profile",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: MyColors.primaryColor,
       ),
       backgroundColor: MyColors.primaryColor,
@@ -272,19 +299,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                     _buildTextField(phoneController, 'ফোন নাম্বার',
                         'আপনার ফোন নাম্বার সঠিক নয়',
                         keyboardType: TextInputType.phone),
-                    const SizedBox(height: 15),
-                    _buildDonorCheckbox(),
-                    const SizedBox(height: 15),
-                    _buildDropdownField(
-                      'রক্তের গ্রুপ',
-                      bloodGroups,
-                      bloodGroup,
-                      Icons.bloodtype,
-                          (value) => setState(() => bloodGroup = value ?? ''),
-                    ),
-                    const SizedBox(height: 15),
-                    _buildDateField(),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 20),
                     _buildDropdownField(
                       'উপজেলা',
                       [
@@ -302,6 +317,19 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                       Icons.location_on,
                           (value) => setState(() => upazila = value ?? ''),
                     ),
+                    _buildDonorCheckbox(),
+                    const SizedBox(height: 15),
+                    if (Get.find<UserProfileUpdateController>().isDonor) ...[
+                      _buildDropdownField(
+                        'রক্তের গ্রুপ',
+                        bloodGroups,
+                        bloodGroup,
+                        Icons.bloodtype,
+                            (value) => setState(() => bloodGroup = value ?? ''),
+                      ),
+                      const SizedBox(height: 15),
+                      _buildDateField(),
+                    ],
                     const SizedBox(height: 20),
                     GetBuilder<UserProfileUpdateController>(
                       builder: (controller) =>
@@ -319,8 +347,8 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                           if (_formKey.currentState!.validate()) {
                             controller
                                 .getUserProfileUpdate(
-                              userid:
-                              widget.profileData.data!.sId ?? "",
+                              userid: widget.profileData.data!.sId ??
+                                  "",
                               email: emailController.text,
                               phone: phoneController.text,
                               bloodGroup: bloodGroup,
