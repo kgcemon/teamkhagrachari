@@ -27,13 +27,20 @@ class AboutUsPage extends StatelessWidget {
               const Center(
                 child: Column(
                   children: [
-                    Text(
-                      'MD Hasanul Karim',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Hasanul Karim ',
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),
+                        ),
+                        Icon(Icons.verified,color: Colors.blue,)
+                      ],
                     ),
                     Text(
-                      'Founder',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,color: Colors.white),
+                      'Founder & CEO',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                   ],
                 ),

@@ -98,45 +98,48 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   Widget _buildProfileImage() {
     return GestureDetector(
       onTap: _pickImage,
-      child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 60,
-            backgroundColor: MyColors.secenderyColor,
-            backgroundImage: _imageFile != null
-                ? FileImage(_imageFile!)
-                : (widget.profileData.data!.image != null &&
-                widget.profileData.data!.image!.isNotEmpty)
-                ? NetworkImage(widget.profileData.data!.image!)
-            as ImageProvider
-                : null,
-            child: (_imageFile == null &&
-                (widget.profileData.data!.image == null ||
-                    widget.profileData.data!.image!.isEmpty))
-                ? Icon(
-              Icons.camera_alt,
-              color: MyColors.white,
-              size: 50,
-            )
-                : null,
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: MyColors.primaryColor, width: 2),
-              ),
-              child:  Icon(
+      child: Hero(
+        tag: "emon",
+        child: Stack(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: MyColors.secenderyColor,
+              backgroundImage: _imageFile != null
+                  ? FileImage(_imageFile!)
+                  : (widget.profileData.data!.image != null &&
+                  widget.profileData.data!.image!.isNotEmpty)
+                  ? NetworkImage(widget.profileData.data!.image!)
+              as ImageProvider
+                  : null,
+              child: (_imageFile == null &&
+                  (widget.profileData.data!.image == null ||
+                      widget.profileData.data!.image!.isEmpty))
+                  ? Icon(
                 Icons.camera_alt,
-                color: MyColors.primaryColor,
-                size: 25,
+                color: MyColors.white,
+                size: 50,
+              )
+                  : null,
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: MyColors.primaryColor, width: 2),
+                ),
+                child:  Icon(
+                  Icons.camera_alt,
+                  color: MyColors.primaryColor,
+                  size: 25,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

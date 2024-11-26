@@ -9,6 +9,7 @@ import 'package:teamkhagrachari/presentation/screen/profile/profile_update_scree
 import 'package:teamkhagrachari/presentation/screen/profile/user_profile_service.dart';
 
 import '../../utils/color.dart';
+import '../profile/user_uploaded_product.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -54,16 +55,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CircleAvatar(
-                              radius: 35,
-                              backgroundImage: NetworkImage(
+                            GestureDetector(
+                              onTap: () => Get.to(() => ProfileUpdateScreen(
+                                profileData:
                                 Get.find<ProfileScreenController>()
-                                    .profileData
-                                    .data!
-                                    .image
-                                    .toString(),
+                                    .profileData,
+                              )),
+                              child: Hero(
+                                tag: "emon",
+                                child: Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 40,
+                                      backgroundColor: MyColors.secenderyColor,
+                                      backgroundImage: NetworkImage( Get.find<ProfileScreenController>()
+                                          .profileData
+                                          .data!
+                                          .image
+                                          .toString(),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: MyColors.primaryColor, width: 2),
+                                        ),
+                                        child:  const Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
+
                             GestureDetector(
                               onTap: () => Get.to(() => ProfileUpdateScreen(
                                     profileData:
@@ -170,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         iconData: Icons.local_activity),
                   ),
                   InkWell(
-                    onTap: () => Get.to(() => const UserProfileServiceScreen()),
+                    onTap: () => Get.to(() => const UserUploadedProduct()),
                     child: const ProfileItem(
                         label: 'আপনার পণ্য সমুহ',
                         value: "আপনার সকল পণ্য সেখতে ক্লিক করুন",

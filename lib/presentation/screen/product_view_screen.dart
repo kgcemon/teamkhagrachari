@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/bangla_convertor.dart';
 import '../controller/ProductDetailsController.dart';
+import '../utils/assets_path.dart';
 import 'ProductDetailsScreen.dart';
 import '../../data/model/ProductDetailsModel.dart';
 
@@ -343,17 +344,9 @@ class ProductViewScreenState extends State<ProductViewScreen> {
                                           }
                                           return Center(
                                             child:
-                                            CircularProgressIndicator(
-                                              value: loadingProgress
-                                                  .expectedTotalBytes !=
-                                                  null
-                                                  ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                                  (loadingProgress
-                                                      .expectedTotalBytes ??
-                                                      1)
-                                                  : null,
-                                            ),
+                                            SizedBox(
+                                              height: 80,
+                                                child: Image.asset(AssetPath.loadingGif)),
                                           );
                                         }
                                       },

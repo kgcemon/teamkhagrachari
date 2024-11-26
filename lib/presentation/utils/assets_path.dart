@@ -7,4 +7,5 @@ class AssetPath{
   static String buySellPng = '$_mainLocation/buysell.png';
   static String weddingPng = '$_mainLocation/wedding.png';
   static String titleImage = '$_mainLocation/title.png';
+  static String loadingGif = '$_mainLocation/loading.gif';
 }

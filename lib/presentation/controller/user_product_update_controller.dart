@@ -11,7 +11,7 @@ import '../../data/urls..dart';
 import '../../push_notification.dart';
 import '../controller/user_auth_controller.dart';
 
-class AddProductController extends GetxController {
+class UserProductUpdateController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   // Text Controllers

@@ -194,13 +194,13 @@ class LoginScreenState extends State<LoginScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      const Text("আপনার পাসওয়ার্ড রিসেট করতে অনুগ্রহ করে আপনার ইমেইলটি লিখুন।",style: TextStyle(color: Colors.grey),),
+                                      const Text("আপনার পাসওয়ার্ড রিসেট করতে অনুগ্রহ করে আপনার ইমেইলটি লিখুন।",style: TextStyle(color: Colors.white),),
                                       const SizedBox(height: 20,),
                                       TextField(
                                         controller: emailController,
                                         keyboardType: TextInputType.emailAddress,
                                         decoration: const InputDecoration(
-                                            label: Text("ইমেইল দিন")),
+                                            label: Text("ইমেইল দিন",style: TextStyle(color: Colors.white),)),
                                         style: const TextStyle(color: Colors.white),),
                                     ],
                                   ),
@@ -225,7 +225,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                         child: const Text(
                           "পাসওয়ার্ড ভুলে গেছেন?",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.blue),
                         ))),
                 const SizedBox(height: 20),
                 Row(

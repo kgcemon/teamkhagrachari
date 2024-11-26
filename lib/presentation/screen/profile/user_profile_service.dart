@@ -37,8 +37,11 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
 
         if (data.isEmpty) {
           return const Center(
-              child: Text('No data available.',
-                  style: TextStyle(color: Colors.white, fontSize: 16)));
+            child: Text(
+              'No data available.',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          );
         }
 
         final totalViews = data
@@ -53,14 +56,6 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blueAccent.withOpacity(0.5),
-                        Colors.purpleAccent.withOpacity(0.5),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
