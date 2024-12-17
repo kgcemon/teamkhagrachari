@@ -2,48 +2,47 @@ import 'package:get/get.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 
 class EditServiceController extends GetxController {
-  var name = ''.obs;
-  var serviceProviderName = ''.obs;
-  var addressDegree = ''.obs;
-  var description = ''.obs;
 
   // Loading and error states
   var isLoading = false.obs;
   var hasError = false.obs;
   var errorMessage = ''.obs;
 
-  // Function to initialize the form with existing service data
-  void initializeFields({
 
+  // Function to update the service
+  Future<bool> updateService({
+    required String serviceId,
+    required String name,
     required String serviceProviderName,
     required String addressDegree,
     required String description,
-  }) {
-    this.serviceProviderName.value = serviceProviderName;
-    this.addressDegree.value = addressDegree;
-    this.description.value = description;
-  }
-
-  // Function to update the service
-  Future<bool> updateService(String serviceId) async {
+  }) async {
     isLoading(true);
     hasError(false);
     errorMessage('');
 
+
+    print(serviceProviderName);
+
     try {
       // Prepare the data to be updated
       Map<String, dynamic> updateData = {
-        'name': name.value,
-        'serviceProviderName': serviceProviderName.value,
-        'addressDegree': addressDegree.value,
-        'description': description.value,
+        'name': name,
+        'serviceProviderName': serviceProviderName,
+        'addressDegree': addressDegree,
+        'description': description,
         // Add other fields as necessary
       };
 
       // Make the PUT or PATCH request
       final response = await NetworkCaller.patchRequest(
         url: "https://api.khagrachariplus.com/api/v1/services/$serviceId",
-        body: updateData, isMultipart: true, token: null,
+        body: {
+          'serviceProviderName': serviceProviderName,
+          'addressDegree': addressDegree,
+          'description': description,
+          // Add other fields as necessary
+        }, isMultipart: false, token: null,
       );
 
       if (response.responseCode == 200) {

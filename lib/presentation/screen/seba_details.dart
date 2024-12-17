@@ -28,7 +28,7 @@ class _SebaDetailsState extends State<SebaDetails> {
     super.initState();
     sebaDetailsController.fetchSebaDetails(widget.sebaID);
     searchController.addListener(() {
-      sebaDetailsController.filterDetails(searchController.text.toLowerCase());
+      sebaDetailsController.filterDetails(searchController.text);
     });
   }
 

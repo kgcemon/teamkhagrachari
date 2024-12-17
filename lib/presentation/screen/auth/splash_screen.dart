@@ -3,9 +3,46 @@ import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import '../../controller/auth/splash_screen_controller.dart';
+import 'package:in_app_update/in_app_update.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    checkForUpdate();
+  }
+
+
+  Future<void> checkForUpdate() async {
+    print('checking for Update');
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+          print('update available');
+          update();
+        }
+      });
+    }).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  void update() async {
+    print('Updating');
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().then((_) {}).catchError((e) {
+      print(e.toString());
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +54,7 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-              Image.asset(AssetPath.mainLogoPNG,width: 200,),
+              Image.asset(AssetPath.logoGif,width: 200,),
             const SizedBox(height: 20),
             Obx(() {
               return Padding(

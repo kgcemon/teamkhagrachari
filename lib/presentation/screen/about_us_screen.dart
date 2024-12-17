@@ -5,6 +5,7 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('About Us',style: TextStyle(color: Colors.white),),
       ),
@@ -15,11 +16,16 @@ class AboutUsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    'Assets/images/hasanul.jpg',
-                    height: 100,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90),
+                      border: Border.all(color: Colors.red,width: 2)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.asset(
+                      'Assets/images/hasanul.jpg',
+                      height: 100,
+                    ),
                   ),
                 ),
               ),
@@ -33,14 +39,14 @@ class AboutUsPage extends StatelessWidget {
                       children: [
                         Text(
                           'Hasanul Karim ',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),
+                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.black),
                         ),
                         Icon(Icons.verified,color: Colors.blue,)
                       ],
                     ),
                     Text(
                       'Founder & CEO',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.white),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black),
                     ),
                   ],
                 ),
@@ -48,12 +54,12 @@ class AboutUsPage extends StatelessWidget {
               const SizedBox(height: 20),
               const Text(
                 'Welcome to Khagrachari Plus',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
               ),
               const SizedBox(height: 10),
               const Text(
                 'Your all-in-one solution for various services and activities within the Khagrachari district.',
-                style: TextStyle(fontSize: 16,color: Colors.white),
+                style: TextStyle(fontSize: 16,color: Colors.black),
               ),
               const SizedBox(height: 20),
               buildSectionTitle('Our Mission'),
@@ -115,7 +121,7 @@ class AboutUsPage extends StatelessWidget {
   Widget buildSectionContent(String content) {
     return Text(
       content,
-      style: const TextStyle(fontSize: 16, color: Colors.white),textAlign: TextAlign.justify,
+      style: const TextStyle(fontSize: 16, color: Colors.black),textAlign: TextAlign.justify,
     );
   }
 
@@ -125,11 +131,11 @@ class AboutUsPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontSize: 16, color: Colors.white),textAlign: TextAlign.justify,),
+          const Text('• ', style: TextStyle(fontSize: 16, color: Colors.black),textAlign: TextAlign.justify,),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 16,color: Colors.white),textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: 16,color: Colors.black),textAlign: TextAlign.justify,
             ),
           ),
         ],

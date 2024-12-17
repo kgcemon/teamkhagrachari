@@ -75,9 +75,10 @@ class UserProfileUpdateController extends GetxController {
   }
 
   /// Sets the donor status
-  void setDonorStatus(bool value) {
+  bool setDonorStatus(bool value) {
     isDonor = value;
     update();
+    return isDonor;
   }
 
   /// Displays an error snackbar

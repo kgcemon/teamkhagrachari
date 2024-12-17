@@ -5,9 +5,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/data/model/seba_details_model.dart';
-import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import '../../data/urls..dart';
 import '../utils/uri_luncher.dart';
+import 'package:http/http.dart' as http;
 
 class SebaCallList extends StatefulWidget {
   final List<SebaDetailsDataListModel> sebaDetailsList;
@@ -53,6 +53,7 @@ class SebaCallListState extends State<SebaCallList> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpansionTile(
+                  //leading: Image.network(sortedList[index].sId.toString()),
                   onExpansionChanged: (value) {
                     if (value && !expandedIds.contains(sortedList[index].sId.toString())) {
                       expandedIds.add(sortedList[index].sId.toString());
@@ -153,6 +154,6 @@ class SebaCallListState extends State<SebaCallList> {
   }
 
   void _countAdd(String id) async {
-    await NetworkCaller.patchRequest(url: "${ApiUrl.viewCountUrl}/$id", isMultipart: false, token: null);
+    await http.patch(Uri.parse("${ApiUrl.viewCountUrl}/$id"));
   }
 }

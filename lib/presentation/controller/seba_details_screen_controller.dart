@@ -24,7 +24,7 @@ class SebaDetailsScreenController extends GetxController {
     } else {
       filteredDetails.value = sebaDetails.value.data?.data
               ?.where((item) =>
-                  item.serviceProviderName!.contains(query.toLowerCase()) ||
+                  item.serviceProviderName!.toLowerCase().contains(query) || item.serviceProviderName!.toUpperCase().contains(query) ||
                   item.location == query)
               .toList() ??
           [];

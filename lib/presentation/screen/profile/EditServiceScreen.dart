@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
-
 import '../../controller/EditServiceController.dart';
 import '../../controller/user_profile__seba_controller.dart';
 
-class EditServiceScreen extends StatelessWidget {
+class EditServiceScreen extends StatefulWidget {
   final String serviceId;
   final String initialServiceProviderName;
   final String initialAddressDegree;
@@ -20,24 +19,42 @@ class EditServiceScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<EditServiceScreen> createState() => _EditServiceScreenState();
+}
+
+class _EditServiceScreenState extends State<EditServiceScreen> {
+
+
+  EditServiceController controller = Get.put(EditServiceController());
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController desController = TextEditingController();
+
+  // Reference to UserProfileSebaController to refresh data after update
+  final UserProfileSebaController userProfileSebaController =
+  Get.find<UserProfileSebaController>();
+
+  // Form Key for validation
+  final _formKey = GlobalKey<FormState>();
+
+
+
+  @override
+  void initState() {
+    nameController.text = widget.initialServiceProviderName;
+    addressController.text = widget.initialAddressDegree;
+    desController.text = widget.initialDescription;
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    final EditServiceController controller = Get.put(EditServiceController());
-    controller.initializeFields(
-      serviceProviderName: initialServiceProviderName,
-      addressDegree: initialAddressDegree,
-      description: initialDescription,
-    );
-
-    // Reference to UserProfileSebaController to refresh data after update
-    final UserProfileSebaController userProfileSebaController = Get.find<UserProfileSebaController>();
-
-    // Form Key for validation
-    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: myAppbar(name: "Edit Service"),
       body: Obx(() {
-        // Display loading indicator while updating
+
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -54,8 +71,8 @@ class EditServiceScreen extends StatelessWidget {
 
                   // Service Provider Name Field
                   TextFormField(
+                    controller: nameController,
                     style: const TextStyle(color: Colors.white),
-                    initialValue: controller.serviceProviderName.value,
                     decoration: InputDecoration(
                       labelStyle: const TextStyle(color: Colors.white),
                       labelText: 'ব্যক্তি/প্রতিষ্ঠানের নাম/টাইটেল',
@@ -63,7 +80,6 @@ class EditServiceScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    onChanged: (value) => controller.serviceProviderName.value = value,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Service provider name is required.';
@@ -75,8 +91,8 @@ class EditServiceScreen extends StatelessWidget {
 
                   // Address/Degree Field
                   TextFormField(
+                    controller: addressController,
                     style: const TextStyle(color: Colors.white),
-                    initialValue: controller.addressDegree.value,
                     decoration: InputDecoration(
                       labelStyle: const TextStyle(color: Colors.white),
                       labelText: 'Address/Degree',
@@ -84,7 +100,6 @@ class EditServiceScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    onChanged: (value) => controller.addressDegree.value = value,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Address/Degree is required.';
@@ -96,8 +111,8 @@ class EditServiceScreen extends StatelessWidget {
 
                   // Description Field
                   TextFormField(
+                    controller: desController,
                     style: const TextStyle(color: Colors.white),
-                    initialValue: controller.description.value,
                     decoration: InputDecoration(
                       labelStyle: const TextStyle(color: Colors.white),
                       labelText: 'Description',
@@ -106,7 +121,6 @@ class EditServiceScreen extends StatelessWidget {
                       ),
                     ),
                     maxLines: 5,
-                    onChanged: (value) => controller.description.value = value,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Description is required.';
@@ -133,7 +147,12 @@ class EditServiceScreen extends StatelessWidget {
                       // Validate the form
                       if (_formKey.currentState!.validate()) {
                         // Attempt to update the service
-                        bool success = await controller.updateService(serviceId);
+                        bool success = await controller.updateService(
+                            serviceId: widget.serviceId,
+                            name: "name",
+                            serviceProviderName: nameController.text,
+                            addressDegree: addressController.text,
+                            description: desController.text);
                         if (success) {
                           // Refresh the service list
                           userProfileSebaController.getLoadUserSeba();
@@ -154,7 +173,10 @@ class EditServiceScreen extends StatelessWidget {
                         }
                       }
                     },
-                    child: const Text('Update Service',style: TextStyle(color: Colors.white),),
+                    child: const Text(
+                      'Update Service',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),

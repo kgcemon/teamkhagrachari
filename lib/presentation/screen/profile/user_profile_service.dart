@@ -207,8 +207,7 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                                                         .toString(),
                                                 initialAddressDegree:
                                                     data[index]
-                                                        .location
-                                                        .toString(),
+                                                        .addressDegree.toString(),
                                                 initialDescription: data[index]
                                                     .description
                                                     .toString(),

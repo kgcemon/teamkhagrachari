@@ -93,6 +93,7 @@ class AddProductController extends GetxController {
     }
   }
 
+
   void removeImage(int index) {
     images[index] = null;
   }
