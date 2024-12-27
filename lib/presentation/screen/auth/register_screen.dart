@@ -18,6 +18,7 @@ class RegistrationScreenState extends State<RegistrationScreen> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController referController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController upozilaController = TextEditingController();
@@ -117,26 +118,6 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                       const SizedBox(height: 5),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     const Text(
-                      //       "আপনি কি রক্ত দানে আগ্রহি?",
-                      //       style: TextStyle(color: Colors.white),
-                      //     ),
-                      //     GetBuilder<RegisterController>(
-                      //       builder: (controller) => Checkbox(
-                      //         focusColor: Colors.red,
-                      //         fillColor: const MaterialStatePropertyAll(Colors.green),
-                      //         shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
-                      //         value: controller.isDonor,
-                      //         onChanged: (value) {
-                      //           controller.setDonorStatus(value!);
-                      //         },
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
                       GetBuilder<RegisterController>(builder: (controller) =>
                       controller.isDonor == true ?  DropdownButtonFormField<String>(
                         icon: const Icon(Icons.bloodtype,color: Colors.red,),
@@ -237,6 +218,20 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                           return null;
                         },
                       )),
+                      const SizedBox(height: 15),
+                       TextFormField(
+                        controller: referController,
+                        style: TextStyle(color: MyColors.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: MyColors.secenderyColor,
+                          focusedBorder: inputStyle(),
+                          enabledBorder: inputStyle(),
+                          labelText: 'রেফার কোড (Optional)',
+                          labelStyle: TextStyle(color: MyColors.white),
+                        ),
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
                       const SizedBox(height: 20),
                       GetBuilder<RegisterController>(
                           builder: (controller) => controller
@@ -260,7 +255,8 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                                               phone: phoneController.text,
                                               bloodGroup: bloodGroup,
                                               upazila: upazila,
-                                              name: nameController.text)
+                                              name: nameController.text,
+                                          sponsor: referController.text)
                                           .then(
                                         (value) async {
                                           if (value == true) {

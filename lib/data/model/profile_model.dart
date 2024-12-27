@@ -20,6 +20,8 @@ class ProfileData {
   String? bloodGroup;
   String? name;
   String? phone;
+  String? balance;
+  String? sponsor;
   String? upazila;
   String? createdAt;
   String? updatedAt;
@@ -47,6 +49,8 @@ class ProfileData {
     bloodGroup = json['bloodGroup'];
     email = json['email'];
     name = json['name'];
+    sponsor = json['myRefferCode'];
+    balance = json['balance'].toString();
     phone = json['phone'];
     upazila = json['upazila'];
     createdAt = json['createdAt'];

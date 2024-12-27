@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:teamkhagrachari/bangla_convertor.dart';
@@ -157,38 +158,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Row(
+                        ElevatedButton.icon(onPressed: () {
+                          Clipboard.setData(ClipboardData(text: "খাগড়াছড়িতে আপনার সকল প্রয়োজনীয় সেবার পূর্ণাঙ্গ সমাধান।Khagrachari Plus Apps download link:  https://play.google.com/store/apps/details?id=org.khagrachari.seba.teamkhagrachari রেজিস্ট্রেশন পেইজে আমার রেফারাল কোড ${controller.profileData.data?.sponsor} ব্যবহার করুন:"));
+                          Get.snackbar("Copy", "Copy Successful");
+                        }, label: Row(
                           children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.orange),
-                                  onPressed: () => Get.to(
-                                      () => const AddUserServiceScreen()),
-                                  child: const Text(
-                                    "সেবা যুক্ত করুন",
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green),
-                                  onPressed: () {
-                                    Get.to(() => const AddProductScreen());
-                                  },
-                                  child: const Text(
-                                    "পণ্য বিক্রি করুন",
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                            ),
+                            const Text("Your Referral Code ",style: TextStyle(color: Colors.orange),),
+                            Text(controller.profileData.data?.sponsor ?? "",style: const TextStyle(color: Colors.white),),
+                            const SizedBox(width: 5,),
+                            const Icon(Icons.copy,size: 16,color: Colors.orange,)
                           ],
-                        )
+                        ))
                       ],
                     ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                            icon: const Icon(Icons.computer,color: Colors.white,),
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(3),
+                                backgroundColor: Colors.orange),
+                            onPressed: () => Get.to(
+                                    () => const AddUserServiceScreen()),
+                            label: const Text(
+                              textAlign: TextAlign.center,
+                              "সেবা যুক্ত করুন",
+                              style: TextStyle(color: Colors.white,fontSize: 12),
+                            )),
+
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                            icon: const Icon(Icons.shopping_cart,color: Colors.white,),
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(3),
+                                backgroundColor: Colors.orange),
+                            onPressed: () {
+                              Get.to(() => const AddProductScreen());
+                            },
+                            label: const Text(
+                              textAlign: TextAlign.center,
+                              "পণ্য বিক্রি করুন",
+                              style: TextStyle(color: Colors.white,fontSize: 12),
+                            )),
+                      ),
+
+                    ],
                   ),
                   const SizedBox(
                     height: 10,
@@ -206,18 +231,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         label: 'আপনার পণ্য সমুহ',
                         value: "আপনার সকল পণ্য সেখতে ক্লিক করুন",
                         iconData: Icons.production_quantity_limits),
-                  ),
-                  ProfileItem(
-                    label: 'সর্বশেষ রক্তদানের তারিখ:',
-                    value: BanglaConvertor.convertPrice(
-                      DateFormat('dd/MM/yyyy').format(
-                        DateTime.parse(
-                          controller.profileData.data!.lastDonateDate
-                              .toString(),
-                        ),
-                      ),
-                    ),
-                    iconData: Icons.date_range,
                   ),
                   ProfileItem(
                     label: 'পরবর্তী রক্তদানের তারিখ:',

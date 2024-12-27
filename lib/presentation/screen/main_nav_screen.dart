@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
@@ -8,6 +9,8 @@ import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dar
 import 'package:teamkhagrachari/presentation/widget/app_drawer.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
 import '../controller/home_screen_controller.dart';
+import '../controller/profile_screen_controller.dart';
+import '../controller/user_auth_controller.dart';
 
 class MainNavScreen extends StatefulWidget {
  final String title;
@@ -21,7 +24,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
   final List<Widget> _screens = <Widget>[
     const HomeScreen(),
     const BloodScreen(),
-      ProfileScreen()
+      const ProfileScreen()
   ];
 
   @override
@@ -29,7 +32,19 @@ class _MainNavScreenState extends State<MainNavScreen> {
     super.initState();
     Get.find<HomeScreenController>().loadNews();
     Get.find<BloodScreenController>().fetchBloodDetails();
+    loadBalance();
   }
+
+
+  loadBalance()async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var data = await sharedPreferences.get("token");
+   if(data !=null){
+     Get.find<ProfileScreenController>().getProfile();
+   }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

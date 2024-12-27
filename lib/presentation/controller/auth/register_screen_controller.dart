@@ -16,6 +16,7 @@ class RegisterController extends GetxController {
     required String bloodGroup,
     required String upazila,
     required String name,
+    required String sponsor,
   }) async {
     isProgress.value = true;
     update();
@@ -28,6 +29,7 @@ class RegisterController extends GetxController {
           "password": password,
           "phone": phone,
           "upazila": upazila,
+          "sponsor": sponsor,
           "name": name,
           "bloodGroup": bloodGroup,
           "lastDonateDate": "2024-01-24T15:34:37.150Z",
