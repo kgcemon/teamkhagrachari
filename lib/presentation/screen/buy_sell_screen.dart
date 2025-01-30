@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/presentation/controller/buy_sell_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/add_product_screen.dart';
@@ -76,12 +75,7 @@ class _BuySellScreenState extends State<BuySellScreen> {
                       crossAxisCount: getCrossAxisCount(context),
                       mainAxisExtent: 75),
                   itemBuilder: (context, index) =>
-                      AnimationConfiguration.staggeredGrid(
-                    position: index,
-                    columnCount: 3,
-                    duration: const Duration(milliseconds: 900),
-                    child: FlipAnimation(
-                      child: GestureDetector(
+                       GestureDetector(
                         onTap: () {
                           Get.to(() => ProductViewScreen(
                                 categoryId: controller.categoryList[index].id,
@@ -126,8 +120,6 @@ class _BuySellScreenState extends State<BuySellScreen> {
                           ),
                         ),
                       ),
-                    ),
-                  ),
                 ),
               );
             })

@@ -3,7 +3,7 @@ description: "this is a khagrachari seba app"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.7.0+7
+version: 1.8.0+765
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -14,14 +14,12 @@ dependencies:
   http: ^1.2.1
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.5
-  marquee: ^2.2.3
   flutter_widget_from_html_core: ^0.14.11
   lecle_flutter_carousel_pro: ^0.0.3
   cached_network_image: ^3.3.1
   lottie: ^3.1.2
   get: ^4.6.6
   intl: any
-  flutter_staggered_animations: ^1.1.1
   share_plus: any
   flutter_local_notifications: ^17.2.1+2
   firebase_core: ^3.2.0
@@ -29,10 +27,17 @@ dependencies:
   photo_view: ^0.15.0
   image_picker: ^1.1.2
   http_parser: ^4.0.0
-  font_awesome_flutter:
   image:
   permission_handler: ^10.2.0
   in_app_update: ^4.2.3
+  device_info_plus: ^11.2.0
+  font_awesome_flutter:
+
+  unique_identifier:
+  vpn_connection_detector: ^1.0.9
+  get_radio_version_plugin: ^1.0.0
+  package_info_plus:
+  google_mobile_ads: ^4.0.0
 
 
 dev_dependencies:

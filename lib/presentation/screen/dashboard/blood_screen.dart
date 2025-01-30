@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
@@ -195,7 +194,6 @@ class _BloodScreenState extends State<BloodScreen> {
                   child: Visibility(
                     visible: shuffledList.isNotEmpty,
                     replacement: Lottie.asset(AssetPath.loadingJson),
-                    child: AnimationLimiter(
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
@@ -208,87 +206,77 @@ class _BloodScreenState extends State<BloodScreen> {
                           final textColor =
                               difference >= 120 ? Colors.green : Colors.red;
 
-                          return AnimationConfiguration.staggeredList(
-                            position: index,
-                            duration: const Duration(milliseconds: 900),
-                            child: SlideAnimation(
-                              verticalOffset: 50.0,
-                              child: FadeInAnimation(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: textColor),
-                                      color: Colors.white.withOpacity(0.13),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: ListTile(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(0)),
-                                      tileColor: Colors.transparent,
-                                      onTap: () => _popup(donor, textColor),
-                                      leading: Container(
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(image: NetworkImage(donor.image ?? ""),fit: BoxFit.cover),
-                                          borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: difference >= 120 ? Colors.green : Colors.red)),
-                                        ),
-                                      title: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            donor.bloodGroup ?? '',
-                                            style: TextStyle(
-                                                color: difference >= 120
-                                                    ? Colors.green
-                                                    : Colors.red),
-                                          ),
-                                          Text(
-                                            donor.name ?? '',
-                                            style: TextStyle(
-                                                color: MyColors.white),
-                                          ),
-                                        ],
-                                      ),
-                                      subtitle: Text(
-                                        donor.upazila ?? '',
-                                        style: const TextStyle(
-                                            color: Colors.yellow,
-                                            fontSize: 10),
-                                      ),
-                                      trailing:  SizedBox(
-                                              width: 80,
-                                              height: 25,
-                                              child: ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(backgroundColor: difference >= 120
-                                                    ? Colors.green : Colors.red),
-                                                onPressed: () => difference >= 120
-                                                    ? uriLaunchUrl('tel:${donor.phone}') : null,
-                                                icon: const Icon(Icons.call,color: Colors.white,size: 12,),
-                                                label: const Text(
-                                                  "Call",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                    ),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: textColor),
+                                color: Colors.white.withOpacity(0.13),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(0)),
+                                tileColor: Colors.transparent,
+                                onTap: () => _popup(donor, textColor),
+                                leading: Container(
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(image: NetworkImage(donor.image ?? ""),fit: BoxFit.cover),
+                                    borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: difference >= 120 ? Colors.green : Colors.red)),
                                   ),
+                                title: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      donor.bloodGroup ?? '',
+                                      style: TextStyle(
+                                          color: difference >= 120
+                                              ? Colors.green
+                                              : Colors.red),
+                                    ),
+                                    Text(
+                                      donor.name ?? '',
+                                      style: TextStyle(
+                                          color: MyColors.white),
+                                    ),
+                                  ],
                                 ),
+                                subtitle: Text(
+                                  donor.upazila ?? '',
+                                  style: const TextStyle(
+                                      color: Colors.yellow,
+                                      fontSize: 10),
+                                ),
+                                trailing:  SizedBox(
+                                        width: 80,
+                                        height: 25,
+                                        child: ElevatedButton.icon(
+                                          style: ElevatedButton.styleFrom(backgroundColor: difference >= 120
+                                              ? Colors.green : Colors.red),
+                                          onPressed: () => difference >= 120
+                                              ? uriLaunchUrl('tel:${donor.phone}') : null,
+                                          icon: const Icon(Icons.call,color: Colors.white,size: 12,),
+                                          label: const Text(
+                                            "Call",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
                           );
                         },
                         itemCount: shuffledList.length,
                       ),
-                    ),
                   ),
                 );
               },

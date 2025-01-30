@@ -12,57 +12,55 @@ class LastedNewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: GetBuilder<HomeScreenController>(builder: (value) => value.newsList.isNotEmpty
-            ? SizedBox(
-          height: 130,
-          width: double.maxFinite,
+    return GetBuilder<HomeScreenController>(builder: (value) => value.newsList.isNotEmpty
+        ? AspectRatio(
+      aspectRatio: 3/1,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemCount: value.newsList.length,
-            itemBuilder: (context, index) => SizedBox(
-              width: 140,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    ModalBottomSheetRoute(
-                        builder: (context) => NewsViewScreen(
-                            newsViewList: value.newsList, index: index),
-                        isScrollControlled: true),
-                  ),
-                  child: Column(
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: value.newsList[index].thumbnail,height: 80,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const CupertinoActivityIndicator(),
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: AspectRatio(
+                aspectRatio: 2/1,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: NetworkImage(value.newsList[index].thumbnail),fit: BoxFit.cover),
+                    borderRadius: BorderRadius.circular(8),
+                      color: Colors.white.withOpacity(0.1)),
+                  child: GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      ModalBottomSheetRoute(
+                          builder: (context) => NewsViewScreen(
+                              newsViewList: value.newsList, index: index),
+                          isScrollControlled: true),
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(8),bottomLeft: Radius.circular(8)),
+                          color: Colors.black.withOpacity(0.5)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(
+                          value.newsList[index].title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13,fontFamily: "banglafont"),
+                        ),
                       ),
-
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        value.newsList[index].title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 11,fontFamily: "banglafont"),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         )
-            : const LinearProgressIndicator(
-          color: Colors.white,
-        ),)
-    );
+        : const LinearProgressIndicator(
+      color: Colors.white,
+    ),);
   }
 }

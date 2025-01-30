@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -35,17 +34,10 @@ class SebaCallListState extends State<SebaCallList> {
         return viewB.compareTo(viewA);
       });
 
-    return AnimationLimiter(
-      child: ListView.builder(
+    return ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: sortedList.length,
-        itemBuilder: (context, index) => AnimationConfiguration.staggeredList(
-          position: index,
-          duration: const Duration(milliseconds: 900),
-          child: SlideAnimation(
-            verticalOffset: 50.0,
-            child: FadeInAnimation(
-              child: Container(
+        itemBuilder: (context, index) => Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                 decoration: BoxDecoration(
                   border: Border.all(width: 3 ,color: index == 0 ? Colors.blue : Colors.transparent),
@@ -146,11 +138,7 @@ class SebaCallListState extends State<SebaCallList> {
                   ],
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-    );
+      );
   }
 
   void _countAdd(String id) async {

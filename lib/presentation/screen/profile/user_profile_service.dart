@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
@@ -50,7 +49,6 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
 
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: AnimationLimiter(
             child: Column(
               children: [
                 Container(
@@ -79,14 +77,7 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     itemCount: data.length,
-                    itemBuilder: (context, index) =>
-                        AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 700),
-                      child: SlideAnimation(
-                        verticalOffset: 50.0,
-                        child: FadeInAnimation(
-                          child: Card(
+                    itemBuilder: (context, index) => Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -231,14 +222,10 @@ class _UserProfileServiceScreenState extends State<UserProfileServiceScreen> {
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ],
             ),
-          ),
         );
       }),
     );

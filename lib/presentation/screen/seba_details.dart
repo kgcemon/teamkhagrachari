@@ -6,6 +6,8 @@ import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/widget/global/myappbar.dart';
 import 'package:teamkhagrachari/presentation/widget/seba_call_list_widget.dart';
 
+import '../add_user_service_screen.dart';
+
 class SebaDetails extends StatefulWidget {
   final String sebaID;
   final String sebaname;
@@ -37,6 +39,23 @@ class _SebaDetailsState extends State<SebaDetails> {
     final double padding = MediaQuery.of(context).size.width * 0.04;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(() => const AddUserServiceScreen());
+        },
+        label: const Text(
+          "সেবা যোগ করুন",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        icon: const Icon(Icons.add, size: 20),
+        backgroundColor: Colors.teal,
+        // You can change this to any color you like
+        splashColor: Colors.tealAccent, // The splash effect color when tapped
+      ),
       appBar: myAppbar(name: widget.sebaname),
       body: Padding(
         padding: EdgeInsets.all(padding),
@@ -50,7 +69,7 @@ class _SebaDetailsState extends State<SebaDetails> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white.withOpacity(0.13)),
                     child: Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(1.0),
                       child: TextField(
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
@@ -63,7 +82,7 @@ class _SebaDetailsState extends State<SebaDetails> {
                           fillColor: Colors.transparent,
                           hintText: "Search",
                           hintStyle: const TextStyle(
-                              color: Colors.white, fontSize: 13),
+                              color: Colors.white54, fontSize: 13),
                           suffixIcon: Icon(
                             Icons.search,
                             color: MyColors.white,
@@ -79,7 +98,7 @@ class _SebaDetailsState extends State<SebaDetails> {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5),
+                        horizontal: 10.0, vertical: 1),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.13),
                       borderRadius: BorderRadius.circular(10),
