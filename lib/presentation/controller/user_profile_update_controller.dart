@@ -7,7 +7,7 @@ import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 
 class UserProfileUpdateController extends GetxController {
   var isProgress = false.obs;
-  bool isDonor = true;
+  bool isDonor = false;
 
   /// Update user profile with optional image upload
   Future<bool> getUserProfileUpdate({

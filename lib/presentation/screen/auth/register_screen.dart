@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:teamkhagrachari/presentation/controller/auth/register_screen_controller.dart';
-import 'package:teamkhagrachari/presentation/screen/auth/login_screen.dart';
+
 import '../../../data/upozila.dart';
 import '../../controller/auth/login_controller.dart';
+import '../../controller/auth/register_screen_controller.dart';
+import '../../utils/assets_path.dart';
 import '../../utils/color.dart';
+import 'login_screen.dart';
+// ... other imports ...
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -15,293 +18,103 @@ class RegistrationScreen extends StatefulWidget {
 
 class RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RegisterController registerController = Get.put(RegisterController());
+  final LoginController loginController = Get.put(LoginController());
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController referController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController upozilaController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController referController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
   String bloodGroup = "";
   String upazila = "";
-  LoginController controller = LoginController();
-
-
 
   @override
   void dispose() {
-    super.dispose();
     nameController.dispose();
     passwordController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    upozilaController.dispose();
+    referController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Register",
-          style: TextStyle(color: Colors.white),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              MyColors.primaryColor,
+              MyColors.secenderyColor,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                const SizedBox(height: 16,),
+                _buildHeaderSection(),
+                const SizedBox(height: 22),
+                _buildRegistrationForm(),
+              ],
+            ),
+          ),
         ),
       ),
-      backgroundColor: MyColors.primaryColor,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+    );
+  }
+
+  Widget _buildHeaderSection() {
+    return const Text(
+      'নতুন একাউন্ট তৈরি করুন',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildRegistrationForm() {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Form(
           key: _formKey,
           child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: nameController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'নাম',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'ইমেইল',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      TextFormField(
-                        controller: phoneController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'ফোন নাম্বার',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your phone number';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 5),
-                      GetBuilder<RegisterController>(builder: (controller) =>
-                      controller.isDonor == true ?  DropdownButtonFormField<String>(
-                        icon: const Icon(Icons.bloodtype,color: Colors.red,),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'রক্তের গ্রুপ',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        dropdownColor: MyColors.secenderyColor,
-                        style: TextStyle(color: MyColors.white),
-                        items: bloodGroups.map((String group) {
-                          return DropdownMenuItem<String>(
-                            value: group,
-                            child: Text(group),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            bloodGroup = newValue!;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select your blood group';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          bloodGroup = value!;
-                        },
-                      ) : const SizedBox()),
-                      const SizedBox(height: 15),
-                      DropdownButtonFormField<String>(
-                        icon: const Icon(Icons.location_on,color: Colors.green,),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'উপজেলা',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        dropdownColor: MyColors.secenderyColor,
-                        style: TextStyle(color: MyColors.white),
-                        items: upozila.map((String group) {
-                          return DropdownMenuItem<String>(
-                            value: group,
-                            child: Text(group),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            upazila = newValue!;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select your upazila';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          upazila = value!;
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      Obx(() => TextFormField(
-                        obscureText: controller.obscurePassword.value,
-                        controller: passwordController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'নতুন পাসওয়ার্ড',
-                          labelStyle: TextStyle(color: MyColors.white),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.obscurePassword.value
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: MyColors.white,
-                            ),
-                            onPressed: () {
-                              controller.obscurePasswordChanger();
-                            },
-                          ),
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                      )),
-                      const SizedBox(height: 15),
-                       TextFormField(
-                        controller: referController,
-                        style: TextStyle(color: MyColors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: MyColors.secenderyColor,
-                          focusedBorder: inputStyle(),
-                          enabledBorder: inputStyle(),
-                          labelText: 'রেফার কোড (Optional)',
-                          labelStyle: TextStyle(color: MyColors.white),
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                      ),
-                      const SizedBox(height: 20),
-                      GetBuilder<RegisterController>(
-                          builder: (controller) => controller
-                                      .isProgress.value ==
-                                  false
-                              ? ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                  ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      controller
-                                          .registerUser(
-                                              email: emailController.text,
-                                              password: passwordController.text,
-                                              phone: phoneController.text,
-                                              bloodGroup: bloodGroup,
-                                              upazila: upazila,
-                                              name: nameController.text,
-                                          sponsor: referController.text)
-                                          .then(
-                                        (value) async {
-                                          if (value == true) {
-                                            Get.snackbar(
-                                                backgroundColor: Colors.green.shade500,
-                                                "Success", "Registration Successful");
-                                            Get.offAll(
-                                                () => const LoginScreen());
-                                          }
-                                        },
-                                      );
-                                    }
-                                  },
-                                  child: const Text(
-                                    'Register',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                )
-                              : const CircularProgressIndicator()),
-                      const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "আপনার কি ইতিমধ্যে একাউন্ট আছে?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          const SizedBox(width: 10),
-                          InkWell(
-                            onTap: () => Get.offAll(() => const LoginScreen()),
-                            child: const Text(
-                              "লগইন করুন",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 70),
-                    ],
-                  ),
-                ),
-              ),
+            children: [
+              _buildNameField(),
+              const SizedBox(height: 16),
+              _buildEmailField(),
+              const SizedBox(height: 16),
+              _buildPhoneField(),
+              const SizedBox(height: 16),
+              _buildBloodGroupDropdown(),
+              const SizedBox(height: 16),
+              _buildUpazilaDropdown(),
+              const SizedBox(height: 16),
+              _buildPasswordField(),
+              const SizedBox(height: 16),
+              _buildReferralField(),
+              const SizedBox(height: 24),
+              _buildRegisterButton(),
+              const SizedBox(height: 16),
+              _buildLoginLink(),
             ],
           ),
         ),
@@ -309,10 +122,247 @@ class RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  OutlineInputBorder inputStyle() => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: MyColors.white,
+  Widget _buildNameField() {
+    return TextFormField(
+      controller: nameController,
+      decoration: InputDecoration(
+        labelText: 'নাম (বাংলায়)',
+        prefixIcon: Icon(Icons.person, color: MyColors.primaryColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+      validator: (value) => value!.isEmpty ? 'নাম লিখুন' : null,
+    );
+  }
+
+  Widget _buildEmailField() {
+    return TextFormField(
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: 'ইমেইল',
+        prefixIcon: Icon(Icons.email, color: MyColors.primaryColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+
+      ),
+      validator: (value) => value!.isEmpty ? 'ইমেইল লিখুন' : null,
+    );
+  }
+
+  Widget _buildPhoneField() {
+    return TextFormField(
+      controller: phoneController,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        labelText: 'মোবাইল নাম্বার',
+        prefixIcon: Icon(Icons.phone, color: MyColors.primaryColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+      validator: (value) => value!.isEmpty ? 'মোবাইল নাম্বার লিখুন' : null,
+    );
+  }
+
+  Widget _buildBloodGroupDropdown() {
+    return GetBuilder<RegisterController>(
+      builder: (controller) => controller.isDonor
+          ? DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: 'রক্তের গ্রুপ',
+          prefixIcon: Icon(Icons.bloodtype, color: MyColors.primaryColor),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        items: bloodGroups.map((String group) {
+          return DropdownMenuItem<String>(
+            value: group,
+            child: Text(group),
+          );
+        }).toList(),
+        onChanged: (value) => bloodGroup = value!,
+        validator: (value) =>
+        value == null ? 'রক্তের গ্রুপ নির্বাচন করুন' : null,
+      )
+          : const SizedBox(),
+    );
+  }
+
+  Widget _buildUpazilaDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: 'উপজেলা',
+        prefixIcon: Icon(Icons.location_on, color: MyColors.primaryColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+      items: upozila.map((String group) {
+        return DropdownMenuItem<String>(
+          value: group,
+          child: Text(group),
+        );
+      }).toList(),
+      onChanged: (value) => upazila = value!,
+      validator: (value) => value == null ? 'উপজেলা নির্বাচন করুন' : null,
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return Obx(() => TextFormField(
+      controller: passwordController,
+      obscureText: loginController.obscurePassword.value,
+      decoration: InputDecoration(
+        labelText: 'পাসওয়ার্ড',
+        prefixIcon: Icon(Icons.lock, color: MyColors.primaryColor),
+        suffixIcon: IconButton(
+          icon: Icon(
+            loginController.obscurePassword.value
+                ? Icons.visibility_off
+                : Icons.visibility,
+            color: Colors.grey,
+          ),
+          onPressed: loginController.obscurePasswordChanger,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+      validator: (value) => value!.isEmpty ? 'পাসওয়ার্ড লিখুন' : null,
+    ));
+  }
+
+  Widget _buildReferralField() {
+    return TextFormField(
+      controller: referController,
+      decoration: InputDecoration(
+        labelText: 'রেফার কোড (ঐচ্ছিক)',
+        prefixIcon: Icon(Icons.card_giftcard, color: MyColors.primaryColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRegisterButton() {
+    return GetBuilder<RegisterController>(
+      builder: (controller) => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: _handleRegistration,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: MyColors.primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: controller.isProgress.value
+              ? const CircularProgressIndicator(color: Colors.white)
+              : const Text(
+            'রেজিস্ট্রেশন সম্পন্ন করুন',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'ইতিমধ্যে একাউন্ট আছে? ',
+          style: TextStyle(color: Colors.grey.shade600),
+        ),
+        TextButton(
+          onPressed: () => Get.offAll(() => const LoginScreen()),
+          child: Text(
+            'লগইন করুন',
+            style: TextStyle(
+              color: MyColors.primaryColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _handleRegistration() {
+    if (_formKey.currentState!.validate()) {
+      registerController.registerUser(
+        email: emailController.text,
+        password: passwordController.text,
+        phone: phoneController.text,
+        bloodGroup: bloodGroup,
+        upazila: upazila,
+        name: nameController.text,
+        sponsor: referController.text,
       );
+    }
+  }
 }

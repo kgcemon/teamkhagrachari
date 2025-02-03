@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:teamkhagrachari/controller_binder.dart';
 import 'package:teamkhagrachari/presentation/screen/auth/splash_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
@@ -9,9 +10,15 @@ class TeamKhagrachari extends StatelessWidget {
   const TeamKhagrachari({super.key});
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GetMaterialApp(
       initialBinding: ControllerBinder(),
       theme: ThemeData(
+        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+          bodyMedium: GoogleFonts.notoSerifBengali(
+            textStyle: textTheme.bodyMedium,
+          ),
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
         listTileTheme:  const ListTileThemeData(
           leadingAndTrailingTextStyle: TextStyle(color: Colors.white),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
+import 'package:teamkhagrachari/presentation/controller/buy_sell_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/controller/main_bottom_nav_bar_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/home_screen.dart';

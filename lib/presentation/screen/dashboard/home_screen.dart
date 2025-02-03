@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lecle_flutter_carousel_pro/lecle_flutter_carousel_pro.dart';
-import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/data/network_caller/network_caller.dart';
 import 'package:teamkhagrachari/data/urls..dart';
+import 'package:teamkhagrachari/presentation/controller/buy_sell_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/buy_sell_screen.dart';
 import 'package:teamkhagrachari/presentation/controller/home_screen_controller.dart';
-import 'package:teamkhagrachari/presentation/screen/dashboard/blood_screen.dart';
-import 'package:teamkhagrachari/presentation/screen/voting_screen.dart';
 import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/widget/home/seba_catagory_card.dart';
@@ -20,8 +18,11 @@ import 'package:teamkhagrachari/presentation/widget/lasted_news_widget.dart';
 import '../../../local_notification_service.dart';
 import '../../../main.dart';
 import '../../../push_notification.dart';
+import '../../controller/blood_screen_controller.dart';
+import '../../controller/main_bottom_nav_bar_controller.dart';
 import '../bijoy_result.dart';
 import 'package:http/http.dart' as http;
+import '../product_view_screen.dart';
 
 int popupCount = 0;
 
@@ -38,14 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String importantServiceQuery = '';
   String totalView = "0";
 
-
-
   InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-2912066127127483/5260391533', // Your Interstitial Ad Unit ID
+      adUnitId: 'ca-app-pub-2912066127127483/5260391533',
+      // Your Interstitial Ad Unit ID
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -65,9 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _interstitialAd?.show();
     }
   }
-
-
-
 
   loadPopUp() async {
     if (popupCount == 0) {
@@ -122,17 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
         LocalNotificationService.display(message);
       }
     });
-    loadViews();
     _loadInterstitialAd();
   }
 
-  loadViews() async {
-    var data = await http
-        .get(Uri.parse("https://lottery.khagrachariplus.com/api/showView"));
-    List<dynamic> result = jsonDecode(data.body);
-    totalView = result[0]['count'].toString();
-    setState(() {});
-  }
 
   List dedicatedServicesList = [
     {"name": "রক্তদাতা", "image": AssetPath.bloodPNG},
@@ -140,6 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
     {"name": "শাদী মোবারক", "image": AssetPath.weddingPng},
     {"name": "ডাক্তারের সাক্ষাৎ", "image": AssetPath.weddingPng},
   ];
+
+  final BuySellScreenController _buySellController =
+      Get.put(BuySellScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -156,25 +148,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ImageSliderWidget(sliderImagesList: controller.sliderImageList),
                 const SizedBox(height: 10),
                 const Text(
-                  "Latest News",
+                  "সর্বশেষ সংবাদ",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 20,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 10),
                 const LastedNewsWidget(),
-                const SizedBox(height: 10),
-                const Text(
-                  "Running Events",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.orange,
-                  ),
-                ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 Center(
                   child: GestureDetector(
                     onTap: () async {
@@ -182,94 +165,241 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: GestureDetector(
                       onTap: () {
-                        Get.to(()=>const VotingScreen());
+                        //Get.to(()=>const VotingScreen());
                         _showInterstitialAd();
                       },
                       child: Container(
                         padding: const EdgeInsets.all(22),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green),
-                          color: Colors.white.withOpacity(0.1), // Transparent background
+                          border: Border.all(color: Colors.blueAccent),
+                          color: Colors.white.withOpacity(0.1),
+                          // Transparent background
                           borderRadius: BorderRadius.circular(10),
                           //border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
                         ),
                         child: const Text(
                           "খাগড়াছড়ি প্লাস মেগা কন্টেস্ট",
                           style: TextStyle(
-                            fontSize: 16, // Bigger font size for clear visibility
-                            color: Colors.orangeAccent, // Eye-catching color
-                            fontFamily: "banglafont",
-                            fontWeight: FontWeight.bold, // Bold text to make it prominent
+                            fontSize: 20,
+                            // Bigger font size for clear visibility
+                            color: Colors.blueAccent,
+                            // Eye-catching color
+                            fontWeight: FontWeight
+                                .bold, // Bold text to make it prominent
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Dedicated Services",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "ক্রয়-বিক্রয়",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            padding: const EdgeInsets.all(0)),
+                        onPressed: () {
+                          Get.to(() => const BuySellScreen());
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "See All",
+                              style: TextStyle(color: Colors.blueAccent),
+                            ),
+                            Icon(
+                              Icons.arrow_right,
+                              size: 30,
+                              color: Colors.blueAccent,
+                            )
+                          ],
+                        ))
+                  ],
                 ),
-                const SizedBox(height: 10,),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: _dedicatedServices(),
+                Obx(
+                  () => _buySellController.categoryList.value.isEmpty
+                      ? const Center(child: CircularProgressIndicator())
+                      : GetBuilder<BuySellScreenController>(builder: (controller) => GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 6,
+                    shrinkWrap: true,
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        crossAxisCount: 3,
+                        mainAxisExtent: 100),
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => Get.to(() => ProductViewScreen(
+                        categoryId:
+                        _buySellController.categoryList[index].id,
+                        title:
+                        _buySellController.categoryList[index].name,
+                      )),
+                      child: Card(
+                        margin: const EdgeInsets.all(0),
+                        color: Colors.transparent,
+                        elevation: 20,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: FittedBox(
+                            child: Column(
+                              children: [
+                                CachedNetworkImage(
+                                  width: 50,
+                                  imageUrl: imgUrlMaker(_buySellController
+                                      .categoryList[index].icon ??
+                                      ""),
+                                  placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3.0),
+                                  child: Text(
+                                    _buySellController
+                                        .categoryList[index].name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),),
                 ),
-                // const SizedBox(height: 10),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(10),
-                //     color: Colors.white.withOpacity(0.13),
-                //   ),
-                //   child: TextField(
-                //     cursorColor: Colors.white,
-                //     style: const TextStyle(color: Colors.white),
-                //     decoration: InputDecoration(
-                //       border: InputBorder.none,
-                //       enabledBorder: InputBorder.none,
-                //       focusedBorder: InputBorder.none,
-                //       filled: true,
-                //       fillColor: Colors.transparent,
-                //       hintText: "Search Important Services",
-                //       hintStyle: const TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 12,
-                //       ),
-                //       suffixIcon: Icon(
-                //         Icons.search,
-                //         color: MyColors.white,
-                //       ),
-                //     ),
-                //     onChanged: (value) {
-                //       setState(() {
-                //         importantServiceQuery = value.toLowerCase();
-                //       });
-                //     },
-                //   ),
-                // ),
-                const SizedBox(height: 10),
                 SebaCatagoryCard(
                   sebaList: controller.category.where((item) {
                     final name = item.name.toString().toLowerCase();
                     return name.contains(importantServiceQuery);
                   }).toList(),
-                  sebaName: 'Important Services',
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Image.network(
-                      "https://khagrachariplus.com/wp-content/uploads/2024/10/Khagrahcari-Plus-ad.gif"),
+                  sebaName: 'গুরুত্বপূর্ণ সেবা',
                 ),
                 const SizedBox(
-                  height: 70,
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "রক্তদাতা",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            padding: const EdgeInsets.all(0)),
+                        onPressed: () {
+                          Get.to(() => const BuySellScreen());
+                        },
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell( onTap: () {
+                              _showInterstitialAd();
+                              Get.find<NavButtonControllerController>().changeIndex(1);
+                            },
+                              child: const Text(
+                                "See All",
+                                style: TextStyle(color: Colors.blueAccent),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.arrow_right,
+                              size: 30,
+                              color: Colors.blueAccent,
+                            )
+                          ],
+                        ))
+                  ],
+                ),
+                GetBuilder<BloodScreenController>(
+                  builder: (controller) => controller.bloodDetailsList.isEmpty
+                      ? const CircularProgressIndicator()
+                      : GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 6,
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  crossAxisCount: 3,
+                                  mainAxisExtent: 100),
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () => Get.find<NavButtonControllerController>().changeIndex(1),
+                            child: Card(
+                              margin: const EdgeInsets.all(0),
+                              color: Colors.transparent,
+                              elevation: 20,
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(controller
+                                          .bloodDetailsList[index].image
+                                          .toString()),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 3.0),
+                                      child: Text(
+                                        controller.bloodDetailsList[index].name
+                                            .toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                 )
               ],
             ),
@@ -278,99 +408,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _dedicatedServices() {
-    List filteredServices = dedicatedServicesList
-        .where((service) =>
-            service["name"].toString().toLowerCase().contains(searchQuery))
-        .toList();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        for (int i = 0; i < filteredServices.length; i++)
-          GestureDetector(
-            onTap: () {
-              if (i == 0) {
-                Get.to(() => const BloodScreen());
-              } else if (i == 1) {
-                Get.to(() => const BuySellScreen());
-              } else {
-                Get.defaultDialog(
-                  backgroundColor: Colors.white,
-                  title: filteredServices[i]['name'],
-                  content: Lottie.asset("Assets/images/coming.json"),
-                );
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: _dedicatedServicesCard(filteredServices, i),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _dedicatedServicesCard(List services, int i) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned(
-          right: -0,
-          child: services[i]['name'] == "রক্তদাতা" ||
-                  services[i]['name'] == "ক্রয়-বিক্রয়"
-              ? Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: MyColors.white.withOpacity(0.35), // Gold-like color
-                  ),
-                  child: const Icon(
-                    Icons.star,
-                    color: Colors.white,
-                    size: 10,
-                  ),
-                )
-              : const Text(""),
-        ),
-        Container(
-          width: 110,
-          height: 80,
-          padding: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.13),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                services[i]['image'],
-                height: 30,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.error, size: 30);
-                },
-              ),
-              const SizedBox(height: 5),
-              FittedBox(
-                child: Text(
-                  services[i]['name'],
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                    fontFamily: "banglafont",
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+String imgUrlMaker(String urls) {
+  if (urls.contains("http")) {
+    var mm = urls.split("http")[1];
+    return "https$mm";
+  } else {
+    return urls;
   }
 }
 

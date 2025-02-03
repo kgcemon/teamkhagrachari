@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teamkhagrachari/presentation/controller/blood_screen_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/dashboard/profile_screen.dart';
@@ -7,6 +8,8 @@ import 'package:teamkhagrachari/presentation/utils/assets_path.dart';
 import 'package:teamkhagrachari/presentation/utils/color.dart';
 import 'package:teamkhagrachari/presentation/utils/uri_luncher.dart';
 import 'dart:math';
+
+int _loadPopup = 0;
 
 class BloodScreen extends StatefulWidget {
   const BloodScreen({super.key});
@@ -19,13 +22,52 @@ class _BloodScreenState extends State<BloodScreen> {
   String selectedBloodGroup = 'রক্তের গ্রুপ';
   String selectedUpazila = 'উপজেলা';
 
+
+
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-2912066127127483/5260391533', // Your Interstitial Ad Unit ID
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('Failed to load an interstitial ad: ${error.message}');
+          _isInterstitialAdReady = false;
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_isInterstitialAdReady) {
+      _interstitialAd?.show();
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      const Duration(seconds: 1),
-      () => loadDialoge(),
-    );
+    if(_loadPopup == 0){
+      Future.delayed(
+        const Duration(seconds: 1), () {
+        loadDialoge();
+        _loadPopup = 1;
+      },
+      );    }
+    _loadInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   loadDialoge() async {
@@ -53,6 +95,7 @@ class _BloodScreenState extends State<BloodScreen> {
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +263,10 @@ class _BloodScreenState extends State<BloodScreen> {
                                     borderRadius:
                                         BorderRadius.circular(0)),
                                 tileColor: Colors.transparent,
-                                onTap: () => _popup(donor, textColor),
+                                onTap: () {
+                                  _popup(donor, textColor);
+                                  _showInterstitialAd();
+                                },
                                 leading: Container(
                                   width: 60,
                                   decoration: BoxDecoration(

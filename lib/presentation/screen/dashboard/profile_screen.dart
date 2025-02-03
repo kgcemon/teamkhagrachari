@@ -175,46 +175,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                            icon: const Icon(Icons.computer,color: Colors.white,),
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(3),
-                                backgroundColor: Colors.orange),
-                            onPressed: () => Get.to(
-                                    () => const AddUserServiceScreen()),
-                            label: const Text(
-                              textAlign: TextAlign.center,
-                              "সেবা যুক্ত করুন",
-                              style: TextStyle(color: Colors.white,fontSize: 12),
-                            )),
-
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                            icon: const Icon(Icons.shopping_cart,color: Colors.white,),
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(3),
-                                backgroundColor: Colors.orange),
-                            onPressed: () {
-                              Get.to(() => const AddProductScreen());
-                            },
-                            label: const Text(
-                              textAlign: TextAlign.center,
-                              "পণ্য বিক্রি করুন",
-                              style: TextStyle(color: Colors.white,fontSize: 12),
-                            )),
-                      ),
-
-                    ],
-                  ),
+                  _buildActionButtons(),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     Expanded(
+                  //       child: ElevatedButton.icon(
+                  //           icon: const Icon(Icons.computer,color: Colors.white,),
+                  //           style: ElevatedButton.styleFrom(
+                  //               padding: const EdgeInsets.all(3),
+                  //               backgroundColor: Colors.orange),
+                  //           onPressed: () => Get.to(
+                  //                   () => const AddUserServiceScreen()),
+                  //           label: const Text(
+                  //             textAlign: TextAlign.center,
+                  //             "সেবা যুক্ত করুন",
+                  //             style: TextStyle(color: Colors.white,fontSize: 12),
+                  //           )),
+                  //
+                  //     ),
+                  //     const SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     Expanded(
+                  //       child: ElevatedButton.icon(
+                  //           icon: const Icon(Icons.shopping_cart,color: Colors.white,),
+                  //           style: ElevatedButton.styleFrom(
+                  //               padding: const EdgeInsets.all(3),
+                  //               backgroundColor: Colors.orange),
+                  //           onPressed: () {
+                  //             Get.to(() => const AddProductScreen());
+                  //           },
+                  //           label: const Text(
+                  //             textAlign: TextAlign.center,
+                  //             "পণ্য বিক্রি করুন",
+                  //             style: TextStyle(color: Colors.white,fontSize: 12),
+                  //           )),
+                  //     ),
+                  //
+                  //   ],
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -253,6 +254,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
+
+Widget _buildActionButtons() {
+  return Column(
+    children: [
+      Row(
+        children: [
+          Expanded(
+            child: _buildActionButton(
+              icon: Icons.design_services,
+              label: 'সেবা যুক্ত করুন',
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _buildActionButton(
+              icon: Icons.shopping_bag,
+              label: 'পণ্য বিক্রি করুন',
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+Widget _buildActionButton({
+  required IconData icon,
+  required String label,
+}) {
+  return Material(
+    borderRadius: BorderRadius.circular(12),
+    color: Colors.white.withOpacity(0.15),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () => label.contains('সেবা যুক্ত করুন')
+          ? Get.to(() => const AddUserServiceScreen())
+          : Get.to(() => const AddProductScreen()),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: MyColors.primaryColor),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 32, color: MyColors.white),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: MyColors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 class ProfileItem extends StatelessWidget {

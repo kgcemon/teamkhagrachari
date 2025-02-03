@@ -64,7 +64,7 @@ class HomeScreenController extends GetxController {
     if (_category.isEmpty) {
       try {
         final response =
-        await NetworkCaller.getRequest(url: ApiUrl.categoryUrl);
+        await NetworkCaller.getRequest(url: ApiUrl.categoryUrl(page: 1, limit: 100));
         if (response.responseCode == 200) {
           _category.clear();
           _category = categoryModelFromJson(

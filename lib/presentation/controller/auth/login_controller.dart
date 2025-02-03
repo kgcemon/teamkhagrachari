@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:teamkhagrachari/presentation/controller/user_auth_controller.dart';
 import 'package:teamkhagrachari/presentation/screen/auth/forgot_pass_change_screen.dart';
 import '../../../data/urls..dart';
@@ -35,6 +36,32 @@ class LoginController extends GetxController {
     isProgress.value = false;
     return false;
   }
+
+
+  Future<void> googleSignIn() async {
+    try {
+      isProgress.value = true;
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        googleAuth.accessToken;
+        print(googleAuth.accessToken);
+        // final AuthCredential credential = GoogleAuthProvider.credential(
+        //   accessToken: googleAuth.accessToken,
+        //   idToken: googleAuth.idToken,
+        // );
+        // await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      print(e);
+    } finally {
+      isProgress.value = false;
+    }
+  }
+
+
 
    obscurePasswordChanger(){
      obscurePassword.value = !obscurePassword.value;

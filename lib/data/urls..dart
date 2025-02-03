@@ -1,6 +1,6 @@
 class ApiUrl {
   static String mainUrl = "https://api.khagrachariplus.com/api/v1";
-  static String categoryUrl = "$mainUrl/services-catagory";
+  static String categoryUrl({required int page, required int limit}) => "$mainUrl/services-catagory?page=$page&limit=$limit";
   static String categoryDetailsUrl = "$mainUrl/services?servicesCatagory=";
   static String newsApiUrl = "https://khagrachariplus.com/loadnewskgc.php?key=hasanul";
   static String bloodUrl = "$mainUrl/users/all-donnor?isDonor=true";
